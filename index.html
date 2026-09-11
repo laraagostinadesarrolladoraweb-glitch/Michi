@@ -3,258 +3,392 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Michi - Virtual Pet</title>
+  <title>Michi - Mi Mascota Virtual</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
-      background: #fce7f3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: radial-gradient(circle at center, #fdf2f8 0%, #fbcfe8 100%);
       min-height: 100vh;
-      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 16px;
+      overflow: hidden;
+      position: relative;
     }
 
-    .consola {
-      background: #f472b6;
-      padding: 20px;
-      border-radius: 28px;
-      box-shadow: 0 10px 0 #db2777, 0 15px 25px rgba(0, 0, 0, 0.15);
+    /* Partículas de fondo flotantes */
+    .bg-particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatBg 8s infinite ease-in-out;
+    }
+
+    @keyframes floatBg {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+      50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; }
+    }
+
+    /* Encabezado superior libre */
+    .header {
       width: 100%;
-      max-width: 360px;
-      text-align: center;
-      border: 4px solid #ec4899;
-    }
-
-    .nombre-mascota {
-      color: #ffffff;
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
-      text-shadow: 2px 2px 0px #db2777;
-    }
-
-    .pantalla {
-      background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
-      border: 4px solid #db2777;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 16px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 12px;
+      z-index: 10;
     }
 
-    /* Bocadillo de mensaje */
-    .bocadillo {
-      position: relative;
-      background: #ffffff;
-      border: 2px solid #db2777;
-      border-radius: 12px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #831843;
-      margin-bottom: 8px;
-      width: 90%;
-      min-height: 36px;
+    .nombre-mascota {
+      color: #be185d;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(244, 114, 182, 0.3);
+    }
+
+    .barras-container {
+      width: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      transition: all 0.2s ease;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 12px 16px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(244, 114, 182, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
-    .bocadillo::after {
+    .barra-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .barra-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #9d174d;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progreso-track {
+      background: #fbcfe8;
+      height: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progreso-fill {
+      height: 100%;
+      width: 100%;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    #fill-hambre {
+      background: linear-gradient(90deg, #34d399, #10b981);
+    }
+
+    #fill-felicidad {
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    }
+
+    /* Área Central - Personaje Flotante */
+    .stage {
+      flex: 1;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Bocadillo de Texto */
+    .speech-bubble {
+      background: #ffffff;
+      color: #831843;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(219, 39, 119, 0.12);
+      margin-bottom: 20px;
+      position: relative;
+      border: 2px solid #f472b6;
+      max-width: 85%;
+      text-align: center;
+    }
+
+    .speech-bubble::after {
       content: '';
       position: absolute;
-      bottom: -8px;
+      bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 8px 8px 0;
+      border-width: 10px 10px 0;
       border-style: solid;
       border-color: #ffffff transparent;
       display: block;
       width: 0;
     }
 
-    .bocadillo::before {
+    .speech-bubble::before {
       content: '';
       position: absolute;
-      bottom: -11px;
+      bottom: -13px;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 10px 10px 0;
+      border-width: 11px 11px 0;
       border-style: solid;
-      border-color: #db2777 transparent;
+      border-color: #f472b6 transparent;
       display: block;
       width: 0;
     }
 
-    .contenedor-michi {
-      width: 130px;
-      height: 130px;
-      margin: 5px auto 10px auto;
+    /* Animaciones de Michi */
+    .michi-wrapper {
+      width: 180px;
+      height: 180px;
+      cursor: pointer;
+      position: relative;
+      animation: floatIdle 3.5s infinite ease-in-out;
       transition: transform 0.2s ease;
     }
 
-    .contenedor-michi:active {
-      transform: scale(0.95);
+    @keyframes floatIdle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
     }
 
-    .barras {
+    .michi-wrapper.happy-bounce {
+      animation: bounce 0.6s ease;
+    }
+
+    .michi-wrapper.eat-wiggle {
+      animation: wiggle 0.5s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-25px) scale(1.1, 0.9); }
+      60% { transform: translateY(0) scale(0.95, 1.05); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(-8deg) scale(1.05); }
+      75% { transform: rotate(8deg) scale(1.05); }
+    }
+
+    /* Sombra proyectada en el piso */
+    .shadow {
+      width: 120px;
+      height: 16px;
+      background: rgba(190, 24, 93, 0.15);
+      border-radius: 50%;
+      margin-top: 10px;
+      animation: shadowScale 3.5s infinite ease-in-out;
+    }
+
+    @keyframes shadowScale {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(0.75); opacity: 0.25; }
+    }
+
+    /* Panel de Botones Inferior */
+    .controls {
       width: 100%;
+      max-width: 400px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .btn {
+      flex: 1;
+      background: #ffffff;
+      color: #be185d;
+      border: none;
+      padding: 14px 10px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 8px 20px rgba(219, 39, 119, 0.15);
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-
-    .barra-info {
-      font-size: 12px;
-      font-weight: 700;
-      color: #9d174d;
-      text-align: left;
-    }
-
-    .progreso {
-      background-color: #fbcfe8;
-      border-radius: 10px;
-      height: 12px;
-      width: 100%;
-      overflow: hidden;
-      border: 2px solid #db2777;
-      margin-top: 3px;
-    }
-
-    .relleno {
-      background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
-      height: 100%;
-      width: 100%;
-      transition: width 0.4s ease;
-    }
-
-    #bar-felicidad {
-      background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
-    }
-
-    .controles {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    button {
-      background-color: #fb7185;
-      color: #ffffff;
-      border: none;
-      border-bottom: 4px solid #e11d48;
-      padding: 12px 10px;
-      font-weight: 700;
-      font-size: 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      flex: 1;
-      transition: all 0.1s ease;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid rgba(255, 255, 255, 0.8);
       touch-action: manipulation;
     }
 
-    button:active {
-      transform: translateY(2px);
-      border-bottom-width: 2px;
+    .btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 4px 10px rgba(219, 39, 119, 0.1);
+    }
+
+    .btn-icon {
+      font-size: 20px;
     }
 
     .btn-reset {
-      background-color: #94a3b8;
-      border-bottom-color: #64748b;
+      background: rgba(255, 255, 255, 0.6);
+      color: #64748b;
+    }
+
+    /* Efectos de Partículas al hacer clic */
+    .heart-particle {
+      position: absolute;
+      font-size: 20px;
+      pointer-events: none;
+      animation: floatHeart 1s forwards ease-out;
+    }
+
+    @keyframes floatHeart {
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.3); }
     }
   </style>
 </head>
 <body>
 
-  <div class="consola">
+  <!-- Fondo Decorativo -->
+  <div class="bg-particle" style="width: 80px; height: 80px; top: 10%; left: 10%;"></div>
+  <div class="bg-particle" style="width: 120px; height: 120px; top: 60%; right: 5%; animation-delay: -3s;"></div>
+
+  <!-- Encabezado y Barras de Progreso -->
+  <div class="header">
     <div class="nombre-mascota">Michi</div>
+    <div class="barras-container">
+      <div class="barra-item">
+        <div class="barra-label"><span>Hambre</span><span id="txt-hambre">100%</span></div>
+        <div class="progreso-track"><div class="progreso-fill" id="fill-hambre"></div></div>
+      </div>
+      <div class="barra-item">
+        <div class="barra-label"><span>Felicidad</span><span id="txt-felicidad">100%</span></div>
+        <div class="progreso-track"><div class="progreso-fill" id="fill-felicidad"></div></div>
+      </div>
+    </div>
+  </div>
 
-    <div class="pantalla">
-      <!-- Mensaje de Michi -->
-      <div class="bocadillo" id="mensaje">¡Hola! Soy Michi 🐾</div>
+  <!-- Zona Central del Personaje -->
+  <div class="stage">
+    <div class="speech-bubble" id="bocadillo">¡Hola! Soy Michi 🐾</div>
+    
+    <div class="michi-wrapper" id="michi-box" onclick="acariciar(event)">
+      <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
+        <!-- Cola con movimiento propio -->
+        <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#f4a261" stroke-width="5" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate" values="0 75 75; 8 75 75; 0 75 75" dur="2s" repeatCount="indefinite"/>
+        </path>
 
-      <!-- Personaje Michi -->
-      <div class="contenedor-michi" onclick="acariciar()">
-        <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-          <path d="M 75 75 Q 90 65 85 50" fill="none" stroke="#f4a261" stroke-width="5" stroke-linecap="round"/>
-          <polygon points="22,40 12,18 36,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
-          <polygon points="24,36 17,22 33,28" fill="#ffb703"/>
-          <polygon points="78,40 88,18 64,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
-          <polygon points="76,36 83,22 67,28" fill="#ffb703"/>
-          <ellipse cx="50" cy="58" rx="32" ry="28" fill="#f4a261" stroke="#e76f51" stroke-width="2.5"/>
-          <ellipse cx="32" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
-          <ellipse cx="68" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+        <!-- Orejas -->
+        <polygon points="22,40 12,18 36,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
+        <polygon points="24,36 17,22 33,28" fill="#ffb703"/>
+        
+        <polygon points="78,40 88,18 64,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
+        <polygon points="76,36 83,22 67,28" fill="#ffb703"/>
+
+        <!-- Cuerpo / Cabeza de Michi -->
+        <ellipse cx="50" cy="58" rx="32" ry="28" fill="#f4a261" stroke="#e76f51" stroke-width="2.5"/>
+
+        <!-- Mofletes rosados -->
+        <ellipse cx="32" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+        <ellipse cx="68" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+
+        <!-- Bigotes con suave parpadeo/animación -->
+        <g>
           <line x1="18" y1="58" x2="30" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="16" y1="64" x2="29" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="82" y1="58" x2="70" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="84" y1="64" x2="71" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
-          <polygon points="48,58 52,58 50,60" fill="#e76f51"/>
-          
-          <g id="ojos">
-            <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
-            <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
-            <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
-            <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
-          </g>
+          <animateTransform attributeName="transform" type="translate" values="0,0; 0,1; 0,0" dur="3s" repeatCount="indefinite"/>
+        </g>
 
-          <path id="boca" d="M 45 62 Q 50 66 55 62" fill="none" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </div>
+        <!-- Nariz -->
+        <polygon points="48,58 52,58 50,60" fill="#e76f51"/>
 
-      <div class="barras">
-        <div class="barra-info">
-          <span>Hambre</span>
-          <div class="progreso"><div class="relleno" id="bar-hambre"></div></div>
-        </div>
-        <div class="barra-info">
-          <span>Felicidad</span>
-          <div class="progreso"><div class="relleno" id="bar-felicidad"></div></div>
-        </div>
-      </div>
+        <!-- Ojos -->
+        <g id="ojos">
+          <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
+          <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
+          <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
+        </g>
+
+        <!-- Boca -->
+        <path id="boca" d="M 45 62 Q 50 66 55 62" fill="none" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+      </svg>
     </div>
 
-    <div class="controles">
-      <button onclick="alimentar()">Comer</button>
-      <button onclick="jugar()">Jugar</button>
-      <button class="btn-reset" onclick="reiniciar()">Reset</button>
-    </div>
+    <!-- Sombra del personaje -->
+    <div class="shadow"></div>
+  </div>
+
+  <!-- Botones Flotantes Inferiores -->
+  <div class="controls">
+    <button class="btn" onclick="alimentar()">
+      <span class="btn-icon">🐟</span>
+      <span>Comer</span>
+    </button>
+    <button class="btn" onclick="jugar()">
+      <span class="btn-icon">🎾</span>
+      <span>Jugar</span>
+    </button>
+    <button class="btn btn-reset" onclick="reiniciar()">
+      <span class="btn-icon">✨</span>
+      <span>Reset</span>
+    </button>
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_cat_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_cat_felicidad')) || 100;
-    let temporizadorMensaje = null;
+    let hambre = parseInt(localStorage.getItem('michi_v3_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v3_felicidad')) || 100;
 
-    const barHambre = document.getElementById('bar-hambre');
-    const barFelicidad = document.getElementById('bar-felicidad');
+    const fillHambre = document.getElementById('fill-hambre');
+    const fillFelicidad = document.getElementById('fill-felicidad');
+    const txtHambre = document.getElementById('txt-hambre');
+    const txtFelicidad = document.getElementById('txt-felicidad');
     const ojos = document.getElementById('ojos');
     const boca = document.getElementById('boca');
-    const elMensaje = document.getElementById('mensaje');
+    const bocadillo = document.getElementById('bocadillo');
+    const michiBox = document.getElementById('michi-box');
 
     function guardar() {
-      localStorage.setItem('michi_cat_hambre', hambre);
-      localStorage.setItem('michi_cat_felicidad', felicidad);
+      localStorage.setItem('michi_v3_hambre', hambre);
+      localStorage.setItem('michi_v3_felicidad', felicidad);
     }
 
-    function mostrarTexto(texto) {
-      elMensaje.innerText = texto;
+    function mostrarTexto(msg) {
+      bocadillo.innerText = msg;
     }
 
     function actualizarInterfaz() {
-      barHambre.style.width = hambre + '%';
-      barFelicidad.style.width = felicidad + '%';
+      fillHambre.style.width = hambre + '%';
+      fillFelicidad.style.width = felicidad + '%';
+      txtHambre.innerText = hambre + '%';
+      txtFelicidad.innerText = felicidad + '%';
 
       if (hambre <= 0 || felicidad <= 0) {
         ojos.innerHTML = `
@@ -283,6 +417,23 @@
       }
     }
 
+    function triggerAnim(className) {
+      michiBox.classList.remove('happy-bounce', 'eat-wiggle');
+      void michiBox.offsetWidth; // Forzar reinicio de animación
+      michiBox.classList.add(className);
+    }
+
+    function spawnHeart(e) {
+      const heart = document.createElement('div');
+      heart.className = 'heart-particle';
+      heart.innerText = '💖';
+      const rect = michiBox.getBoundingClientRect();
+      heart.style.left = (e.clientX || (rect.left + rect.width / 2)) + 'px';
+      heart.style.top = (e.clientY || (rect.top + rect.height / 2)) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    }
+
     function alimentar() {
       if (hambre <= 0 || felicidad <= 0) {
         mostrarTexto('Primero debes reiniciar a Michi 😿');
@@ -291,6 +442,7 @@
       hambre = Math.min(100, hambre + 15);
       guardar();
       actualizarInterfaz();
+      triggerAnim('eat-wiggle');
       mostrarTexto('¡Yummy! Delicioso 🐟');
     }
 
@@ -303,11 +455,14 @@
       hambre = Math.max(0, hambre - 5);
       guardar();
       actualizarInterfaz();
+      triggerAnim('happy-bounce');
       mostrarTexto('¡Qué divertido! 🎉');
     }
 
-    function acariciar() {
+    function acariciar(e) {
       if (hambre > 0 && felicidad > 0) {
+        spawnHeart(e);
+        triggerAnim('happy-bounce');
         mostrarTexto('¡Purr... te quiero! 😻');
       }
     }
@@ -317,10 +472,11 @@
       felicidad = 100;
       guardar();
       actualizarInterfaz();
+      triggerAnim('happy-bounce');
       mostrarTexto('¡Michi está feliz de nuevo! ✨');
     }
 
-    // El hambre y la felicidad bajan cada 7 segundos (7000 ms)
+    // Decremento pasivo cada 7 segundos
     setInterval(() => {
       if (hambre > 0 && felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
@@ -331,7 +487,6 @@
     }, 7000);
 
     actualizarInterfaz();
-    mostrarTexto('¡Hola! Soy Michi 🐾');
   </script>
 </body>
 </html>
