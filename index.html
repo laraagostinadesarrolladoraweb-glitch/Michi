@@ -13,7 +13,7 @@
     }
 
     body {
-      background: #1e1b4b;
+      background: #fce7f3;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,26 +21,27 @@
     }
 
     .consola {
-      background: #312e81;
+      background: #f472b6;
       padding: 24px;
       border-radius: 32px;
-      box-shadow: 0 12px 0 #1e1b4b, 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 0 #db2777, 0 20px 25px -5px rgba(0, 0, 0, 0.15);
       width: 340px;
       text-align: center;
-      border: 4px solid #4338ca;
+      border: 4px solid #ec4899;
     }
 
     .nombre-mascota {
-      color: #e0e7ff;
-      font-size: 24px;
+      color: #ffffff;
+      font-size: 26px;
       font-weight: 800;
       margin-bottom: 16px;
       letter-spacing: 1px;
+      text-shadow: 2px 2px 0px #db2777;
     }
 
     .pantalla {
-      background: linear-gradient(180deg, #c7d2fe 0%, #e0e7ff 100%);
-      border: 4px solid #312e81;
+      background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
+      border: 4px solid #db2777;
       border-radius: 20px;
       padding: 20px;
       margin-bottom: 20px;
@@ -48,9 +49,9 @@
     }
 
     .contenedor-michi {
-      width: 140px;
-      height: 140px;
-      margin: 10px auto 20px auto;
+      width: 150px;
+      height: 150px;
+      margin: 10px auto 15px auto;
       transition: transform 0.2s ease;
     }
 
@@ -67,17 +68,17 @@
     .barra-info {
       font-size: 13px;
       font-weight: 700;
-      color: #312e81;
+      color: #9d174d;
       text-align: left;
     }
 
     .progreso {
-      background-color: #a5b4fc;
+      background-color: #fbcfe8;
       border-radius: 12px;
       height: 14px;
       width: 100%;
       overflow: hidden;
-      border: 2px solid #312e81;
+      border: 2px solid #db2777;
       margin-top: 4px;
     }
 
@@ -99,10 +100,10 @@
     }
 
     button {
-      background-color: #818cf8;
+      background-color: #fb7185;
       color: #ffffff;
       border: none;
-      border-bottom: 4px solid #4f46e5;
+      border-bottom: 4px solid #e11d48;
       padding: 12px 16px;
       font-weight: 700;
       border-radius: 12px;
@@ -117,8 +118,8 @@
     }
 
     .btn-reset {
-      background-color: #f87171;
-      border-bottom-color: #dc2626;
+      background-color: #94a3b8;
+      border-bottom-color: #64748b;
     }
   </style>
 </head>
@@ -128,35 +129,46 @@
     <div class="nombre-mascota">Michi</div>
 
     <div class="pantalla">
-      <!-- Personaje SVG de Michi -->
       <div class="contenedor-michi">
         <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-          <!-- Antenas -->
-          <line x1="35" y1="30" x2="25" y2="15" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="25" cy="15" r="4" fill="#34d399"/>
-          
-          <line x1="65" y1="30" x2="75" y2="15" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="75" cy="15" r="4" fill="#34d399"/>
+          <!-- Cola del gato -->
+          <path d="M 75 75 Q 90 65 85 50" fill="none" stroke="#f4a261" stroke-width="5" stroke-linecap="round"/>
 
-          <!-- Cuerpo tipo Blob -->
-          <path d="M20,60 Q15,25 50,25 Q85,25 80,60 Q85,90 50,90 Q15,90 20,60 Z" fill="#34d399" stroke="#059669" stroke-width="3"/>
+          <!-- Orejas -->
+          <polygon points="22,40 12,18 36,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
+          <polygon points="24,36 17,22 33,28" fill="#ffb703"/>
           
-          <!-- Manchas decorativas -->
-          <circle cx="35" cy="75" r="5" fill="#10b981" opacity="0.5"/>
-          <circle cx="65" cy="70" r="7" fill="#10b981" opacity="0.5"/>
+          <polygon points="78,40 88,18 64,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
+          <polygon points="76,36 83,22 67,28" fill="#ffb703"/>
 
-          <!-- Ojos (Normales por defecto) -->
+          <!-- Cuerpo / Cabeza de Michi -->
+          <ellipse cx="50" cy="58" rx="32" ry="28" fill="#f4a261" stroke="#e76f51" stroke-width="2.5"/>
+
+          <!-- Mofletes rosados -->
+          <ellipse cx="32" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+          <ellipse cx="68" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+
+          <!-- Bigotes -->
+          <line x1="18" y1="58" x2="30" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="16" y1="64" x2="29" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
+          
+          <line x1="82" y1="58" x2="70" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="84" y1="64" x2="71" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Nariz -->
+          <polygon points="48,58 52,58 50,60" fill="#e76f51"/>
+
+          <!-- Ojos -->
           <g id="ojos">
-            <!-- Ojo Izquierdo -->
-            <circle cx="38" cy="48" r="7" fill="#ffffff"/>
-            <circle cx="38" cy="48" r="3" fill="#1e1b4b"/>
-            <!-- Ojo Derecho -->
-            <circle cx="62" cy="48" r="7" fill="#ffffff"/>
-            <circle cx="62" cy="48" r="3" fill="#1e1b4b"/>
+            <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
+            <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
+            
+            <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
+            <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
           </g>
 
-          <!-- Boca (Feliz por defecto) -->
-          <path id="boca" d="M 40 62 Q 50 70 60 62" fill="transparent" stroke="#1e1b4b" stroke-width="3" stroke-linecap="round"/>
+          <!-- Boca -->
+          <path id="boca" d="M 45 62 Q 50 66 55 62" fill="none" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
 
@@ -180,8 +192,8 @@
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_felicidad')) || 100;
+    let hambre = parseInt(localStorage.getItem('michi_cat_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_cat_felicidad')) || 100;
 
     const barHambre = document.getElementById('bar-hambre');
     const barFelicidad = document.getElementById('bar-felicidad');
@@ -189,40 +201,39 @@
     const boca = document.getElementById('boca');
 
     function guardar() {
-      localStorage.setItem('michi_hambre', hambre);
-      localStorage.setItem('michi_felicidad', felicidad);
+      localStorage.setItem('michi_cat_hambre', hambre);
+      localStorage.setItem('michi_cat_felicidad', felicidad);
     }
 
     function actualizarInterfaz() {
       barHambre.style.width = hambre + '%';
       barFelicidad.style.width = felicidad + '%';
 
-      // Cambiar la expresión facial según el estado
       if (hambre <= 0 || felicidad <= 0) {
-        // Estado: Triste / Derrotado
+        // Triste / Derrotado
         ojos.innerHTML = `
-          <text x="32" y="53" font-size="12" font-weight="bold" fill="#1e1b4b">X</text>
-          <text x="56" y="53" font-size="12" font-weight="bold" fill="#1e1b4b">X</text>
+          <path d="M 34 54 L 42 48" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 34 48 L 42 54" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 58 54 L 66 48" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 58 48 L 66 54" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
         `;
-        boca.setAttribute('d', 'M 40 68 Q 50 60 60 68'); // Boca triste
+        boca.setAttribute('d', 'M 45 66 Q 50 61 55 66');
       } else if (hambre < 40 || felicidad < 40) {
-        // Estado: Preocupado
+        // Preocupado
         ojos.innerHTML = `
-          <circle cx="38" cy="48" r="6" fill="#ffffff"/>
-          <circle cx="38" cy="48" r="2" fill="#1e1b4b"/>
-          <circle cx="62" cy="48" r="6" fill="#ffffff"/>
-          <circle cx="62" cy="48" r="2" fill="#1e1b4b"/>
+          <circle cx="38" cy="52" r="3.5" fill="#2b2d42"/>
+          <circle cx="62" cy="52" r="3.5" fill="#2b2d42"/>
         `;
-        boca.setAttribute('d', 'M 42 65 L 58 65'); // Boca recta
+        boca.setAttribute('d', 'M 45 64 L 55 64');
       } else {
-        // Estado: Feliz
+        // Feliz / Normal
         ojos.innerHTML = `
-          <circle cx="38" cy="48" r="7" fill="#ffffff"/>
-          <circle cx="38" cy="48" r="3" fill="#1e1b4b"/>
-          <circle cx="62" cy="48" r="7" fill="#ffffff"/>
-          <circle cx="62" cy="48" r="3" fill="#1e1b4b"/>
+          <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
+          <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
+          <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
         `;
-        boca.setAttribute('d', 'M 40 62 Q 50 70 60 62'); // Boca sonriente
+        boca.setAttribute('d', 'M 45 62 Q 50 66 55 62');
       }
     }
 
@@ -248,7 +259,7 @@
       actualizarInterfaz();
     }
 
-    // Descuento de stats cada 7 segundos (7000 ms)
+    // El hambre y la felicidad bajan cada 7 segundos (7000 ms)
     setInterval(() => {
       if (hambre > 0 && felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
