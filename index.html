@@ -15,7 +15,7 @@
     }
 
     body {
-      background: radial-gradient(circle at center, #fefce8 0%, #fef08a 100%);
+      background: radial-gradient(circle at center, #fffbeb 0%, #fef3c7 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -50,22 +50,22 @@
     }
 
     .nombre-mascota {
-      color: #ca8a04;
+      color: #b45309;
       font-size: 28px;
       font-weight: 900;
       letter-spacing: 1px;
-      text-shadow: 0 2px 10px rgba(234, 179, 8, 0.3);
+      text-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
     }
 
     .barras-container {
       width: 100%;
       display: flex;
       gap: 12px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(10px);
       padding: 12px 16px;
       border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(202, 138, 4, 0.12);
+      box-shadow: 0 8px 20px rgba(180, 83, 9, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.9);
     }
 
@@ -79,13 +79,13 @@
     .barra-label {
       font-size: 12px;
       font-weight: 800;
-      color: #854d0e;
+      color: #78350f;
       display: flex;
       justify-content: space-between;
     }
 
     .progreso-track {
-      background: #fef08a;
+      background: #fde68a;
       height: 12px;
       border-radius: 10px;
       overflow: hidden;
@@ -104,7 +104,7 @@
     }
 
     #fill-felicidad {
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      background: linear-gradient(90deg, #f59e0b, #d97706);
     }
 
     .stage {
@@ -121,16 +121,16 @@
 
     .speech-bubble {
       background: #ffffff;
-      color: #713f12;
+      color: #78350f;
       padding: 12px 18px;
       border-radius: 20px;
       font-weight: 700;
       font-size: 13px;
       line-height: 1.4;
-      box-shadow: 0 10px 25px rgba(202, 138, 4, 0.12);
+      box-shadow: 0 10px 25px rgba(180, 83, 9, 0.12);
       margin-bottom: 20px;
       position: relative;
-      border: 2px solid #eab308;
+      border: 2px solid #f59e0b;
       max-width: 90%;
       text-align: center;
       transition: transform 0.2s ease;
@@ -157,7 +157,7 @@
       transform: translateX(-50%);
       border-width: 11px 11px 0;
       border-style: solid;
-      border-color: #eab308 transparent;
+      border-color: #f59e0b transparent;
       display: block;
       width: 0;
     }
@@ -209,7 +209,7 @@
     .shadow {
       width: 120px;
       height: 16px;
-      background: rgba(202, 138, 4, 0.18);
+      background: rgba(180, 83, 9, 0.15);
       border-radius: 50%;
       margin-top: 10px;
       animation: shadowScale 3.5s infinite ease-in-out;
@@ -231,13 +231,13 @@
     .btn {
       flex: 1;
       background: #ffffff;
-      color: #854d0e;
+      color: #78350f;
       border: none;
       padding: 16px 10px;
       border-radius: 20px;
       font-weight: 800;
       font-size: 16px;
-      box-shadow: 0 8px 20px rgba(202, 138, 4, 0.15);
+      box-shadow: 0 8px 20px rgba(180, 83, 9, 0.12);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -250,7 +250,7 @@
 
     .btn:active {
       transform: scale(0.92);
-      box-shadow: 0 4px 10px rgba(202, 138, 4, 0.1);
+      box-shadow: 0 4px 10px rgba(180, 83, 9, 0.1);
     }
 
     .btn-icon {
@@ -290,43 +290,60 @@
   </div>
 
   <div class="stage">
-    <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para aprender algo nuevo 🐾</div>
+    <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para mimarme o aprender algo nuevo 🐾</div>
     
     <div class="michi-wrapper surprise-entry" id="michi-box" onclick="acariciar(event)">
       <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#f4a261" stroke-width="5" stroke-linecap="round">
+        <!-- Cola atigrada -->
+        <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#e67e22" stroke-width="5" stroke-linecap="round">
           <animateTransform attributeName="transform" type="rotate" values="0 75 75; 8 75 75; 0 75 75" dur="2s" repeatCount="indefinite"/>
         </path>
 
-        <polygon points="22,40 12,18 36,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
-        <polygon points="24,36 17,22 33,28" fill="#ffb703"/>
+        <!-- Oreja Izquierda (Naranja por fuera, rosada centro) -->
+        <polygon points="22,40 12,18 36,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
+        <polygon points="24,36 17,22 33,28" fill="#f2a685"/>
         
-        <polygon points="78,40 88,18 64,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
-        <polygon points="76,36 83,22 67,28" fill="#ffb703"/>
+        <!-- Oreja Derecha -->
+        <polygon points="78,40 88,18 64,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
+        <polygon points="76,36 83,22 67,28" fill="#f2a685"/>
 
-        <ellipse cx="50" cy="58" rx="32" ry="28" fill="#f4a261" stroke="#e76f51" stroke-width="2.5"/>
+        <!-- Cabeza Base Naranja -->
+        <ellipse cx="50" cy="58" rx="32" ry="28" fill="#e67e22" stroke="#d35400" stroke-width="2"/>
 
-        <ellipse cx="32" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
-        <ellipse cx="68" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
+        <!-- Mancha Blanca en Cara (Hocico y Frente estilo gato de la foto) -->
+        <path d="M 50 42 C 40 46 38 62 38 72 C 44 80 56 80 62 72 C 62 62 60 46 50 42 Z" fill="#ffffff"/>
 
-        <g>
-          <line x1="18" y1="58" x2="30" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="16" y1="64" x2="29" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="82" y1="58" x2="70" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="84" y1="64" x2="71" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
-          <animateTransform attributeName="transform" type="translate" values="0,0; 0,1; 0,0" dur="3s" repeatCount="indefinite"/>
+        <!-- Rayas Naranjas en la frente -->
+        <path d="M 44 38 L 47 44 M 50 36 L 50 43 M 56 38 L 53 44" stroke="#d35400" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Rubor Mejillas -->
+        <ellipse cx="30" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
+        <ellipse cx="70" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
+
+        <!-- Bigotes -->
+        <g id="bigotes">
+          <line x1="16" y1="60" x2="28" y2="62" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="14" y1="66" x2="27" y2="65" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="84" y1="60" x2="72" y2="62" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="86" y1="66" x2="73" y2="65" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
         </g>
 
-        <polygon points="48,58 52,58 50,60" fill="#e76f51"/>
+        <!-- Nariz Rosada -->
+        <polygon points="48,59 52,59 50,62" fill="#e8a7a1"/>
 
+        <!-- Ojos Verde/Dorado -->
         <g id="ojos">
-          <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
-          <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
-          <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
-          <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          <circle cx="37" cy="53" r="5" fill="#85a363"/>
+          <circle cx="37" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
+
+          <circle cx="63" cy="53" r="5" fill="#85a363"/>
+          <circle cx="63" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
         </g>
 
-        <path id="boca" d="M 45 62 Q 50 66 55 62" fill="none" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+        <!-- Boca -->
+        <path id="boca" d="M 45 64 Q 50 67 55 64" fill="none" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
     </div>
 
@@ -345,8 +362,8 @@
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v5_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v5_felicidad')) || 100;
+    let hambre = parseInt(localStorage.getItem('michi_v6_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v6_felicidad')) || 100;
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
@@ -357,27 +374,41 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
 
+    const frasesComer = [
+      "🐟 ¡Mmm... delicioso!",
+      "🐱 ¡Gracias por la comida!",
+      "😋 Mi pancita está feliz.",
+      "🐟 ¡Ñam ñam, qué rico!"
+    ];
+
+    const frasesJugar = [
+      "🎾 ¡Sí! Me encanta este juego.",
+      "😸 ¡Qué divertido!",
+      "🎾 ¡A atrapar la pelota!",
+      "🐾 ¡Atrapado!"
+    ];
+
     const sabiduriaGatuna = [
       "💡 Cuidado real: Nunca le des leche de vaca a un gato adulto, no la digieren bien.",
       "📜 Historia: En el Antiguo Egipto, los gatos eran sagrados y protegían las cosechas.",
-      "💡 Cuidado real: Los gatos prefieren su agua lejos de su plato de comida.",
-      "📜 Historia: El maullido fue desarrollado por los gatos solo para comunicarse con los humanos.",
+      "💡 Cuidado real: Los gatos prefieren su agua alejada de su plato de comida.",
+      "📜 Historia: El maullido fue desarrollado por los gatos casi en su totalidad para comunicarse con los humanos.",
       "💡 Cuidado real: Cepillar a tu gato seguido evita que trague tantas bolas de pelo.",
       "📜 Historia: Un gato en la Edad Media era el mejor protector de los graneros contra plagas.",
       "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
     ];
 
     function guardar() {
-      localStorage.setItem('michi_v5_hambre', hambre);
-      localStorage.setItem('michi_v5_felicidad', felicidad);
+      localStorage.setItem('michi_v6_hambre', hambre);
+      localStorage.setItem('michi_v6_felicidad', felicidad);
     }
 
     function mostrarTexto(msg) {
       bocadillo.innerText = msg;
     }
 
-    function obtenerConsejoAleatorio() {
-      return sabiduriaGatuna[Math.floor(Math.random() * sabiduriaGatuna.length)];
+    function obtenerElementoAleatorio(array) {
+      return array[Math.floor(Math.random() * array.length)];
     }
 
     function actualizarInterfaz(mensajePersonalizado = null) {
@@ -388,12 +419,12 @@
 
       if (hambre <= 0 || felicidad <= 0) {
         ojos.innerHTML = `
-          <path d="M 34 54 L 42 48" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 34 48 L 42 54" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 58 54 L 66 48" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 58 48 L 66 54" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 33 55 L 41 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 33 49 L 41 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 59 55 L 67 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 59 49 L 67 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
         `;
-        boca.setAttribute('d', 'M 45 66 Q 50 61 55 66');
+        boca.setAttribute('d', 'M 45 67 Q 50 62 55 67');
         
         if (mensajePersonalizado) {
           mostrarTexto(mensajePersonalizado);
@@ -402,32 +433,34 @@
         } else if (hambre <= 0) {
           mostrarTexto("😾 ¡No tengo energía! Toca el botón 'Comer' 🐟");
         } else {
-          mostrarTexto("😿 Estoy muy triste... Presiona 'Jugar' 🎾");
+          mostrarTexto("😿 Estoy triste... Presiona 'Jugar' 🎾");
         }
       } else if (hambre < 40 || felicidad < 40) {
         ojos.innerHTML = `
-          <circle cx="38" cy="52" r="3.5" fill="#2b2d42"/>
-          <circle cx="62" cy="52" r="3.5" fill="#2b2d42"/>
+          <circle cx="37" cy="53" r="3.5" fill="#2c3e50"/>
+          <circle cx="63" cy="53" r="3.5" fill="#2c3e50"/>
         `;
-        boca.setAttribute('d', 'M 45 64 L 55 64');
+        boca.setAttribute('d', 'M 45 65 L 55 65');
         
         if (mensajePersonalizado) {
           mostrarTexto(mensajePersonalizado);
         } else if (hambre < 40 && felicidad < 40) {
           mostrarTexto("🙀 Presiona 'Comer' 🐟 para alimentarme y 'Jugar' 🎾 para alegrarme.");
         } else if (hambre < 40) {
-          mostrarTexto("😾 Me da hambre... ¡Presiona el botón 'Comer' 🐟!");
+          mostrarTexto("😾 Tengo hambre... ¡Presiona el botón 'Comer' 🐟!");
         } else {
           mostrarTexto("😿 Me estoy aburriendo... Presiona 'Jugar' 🎾.");
         }
       } else {
         ojos.innerHTML = `
-          <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
-          <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
-          <circle cx="62" cy="52" r="4.5" fill="#2b2d42"/>
-          <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
+          <circle cx="37" cy="53" r="5" fill="#85a363"/>
+          <circle cx="37" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
+          <circle cx="63" cy="53" r="5" fill="#85a363"/>
+          <circle cx="63" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
         `;
-        boca.setAttribute('d', 'M 45 62 Q 50 66 55 62');
+        boca.setAttribute('d', 'M 45 64 Q 50 67 55 64');
         if (mensajePersonalizado) {
           mostrarTexto(mensajePersonalizado);
         }
@@ -473,7 +506,7 @@
       if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
       guardar();
       triggerAnim('eat-wiggle');
-      actualizarInterfaz('🐟 ¡Yummy! Tip: Los gatos necesitan alimentos ricos en proteína.');
+      actualizarInterfaz(obtenerElementoAleatorio(frasesComer));
     }
 
     function jugar() {
@@ -481,7 +514,7 @@
       hambre = Math.max(0, hambre - 5);
       guardar();
       triggerAnim('happy-bounce');
-      actualizarInterfaz('🎾 ¡Qué divertido! Jugar despierta el instinto cazador del gato.');
+      actualizarInterfaz(obtenerElementoAleatorio(frasesJugar));
     }
 
     function acariciar(e) {
@@ -490,7 +523,7 @@
       if (hambre < 40 || felicidad < 40) {
         actualizarInterfaz();
       } else {
-        actualizarInterfaz(obtenerConsejoAleatorio());
+        actualizarInterfaz(obtenerElementoAleatorio(sabiduriaGatuna));
       }
     }
 
