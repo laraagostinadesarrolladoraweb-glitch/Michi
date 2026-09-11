@@ -57,6 +57,16 @@
       text-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
     }
 
+    .texto-cancion {
+      font-size: 13px;
+      font-weight: 700;
+      color: #92400e;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 4px 12px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
     .barras-container {
       width: 100%;
       display: flex;
@@ -298,6 +308,18 @@
       font-size: 22px;
     }
 
+    .btn-audio {
+      background: #fde68a;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: none;
+      color: #78350f;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
     .confetti-particle, .heart-particle {
       position: absolute;
       pointer-events: none;
@@ -313,11 +335,23 @@
 </head>
 <body>
 
+  <!-- Reproductor de audio privado -->
+  <audio id="musica-fondo" loop>
+    <source src="cancion.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="bg-particle" style="width: 80px; height: 80px; top: 10%; left: 10%;"></div>
   <div class="bg-particle" style="width: 120px; height: 120px; top: 60%; right: 5%; animation-delay: -3s;"></div>
 
   <div class="header">
     <div class="nombre-mascota">Michi</div>
+    
+    <!-- Subtítulo dinámico -->
+    <div class="texto-cancion" id="subtitulo-cancion">🔒 Canción privada protegida</div>
+
+    <!-- Botón con autenticación -->
+    <button class="btn-audio" id="btn-audio" onclick="gestionarMusica()">🔒 Música Privada</button>
+
     <div class="barras-container">
       <div class="barra-item">
         <div class="barra-label"><span>Hambre</span><span id="txt-hambre">100%</span></div>
@@ -375,7 +409,7 @@
         <!-- Nariz -->
         <polygon points="48,59 52,59 50,62" fill="#e8a7a1"/>
 
-        <!-- Ojos en Tono Café/Oscuro Natural -->
+        <!-- Ojos -->
         <g id="ojos">
           <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
           <circle cx="37" cy="53" r="3" fill="#1f110b"/>
@@ -412,8 +446,11 @@
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v8_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v8_felicidad')) || 100;
+    const CLAVE_CORRECTA = "thelifeofthemichi";
+    let musicaDesbloqueada = localStorage.getItem('michi_musica_auth') === 'true';
+
+    let hambre = parseInt(localStorage.getItem('michi_v9_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v9_felicidad')) || 100;
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
@@ -424,6 +461,9 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
     const stageArea = document.getElementById('stage-area');
+    const musica = document.getElementById('musica-fondo');
+    const btnAudio = document.getElementById('btn-audio');
+    const subtituloCancion = document.getElementById('subtitulo-cancion');
 
     const frasesComer = [
       "🐟 ¡Mmm... delicioso!",
@@ -449,9 +489,45 @@
       "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
     ];
 
+    function actualizarEstadoBotonMusica() {
+      if (!musicaDesbloqueada) {
+        btnAudio.innerText = "🔒 Música Privada";
+        subtituloCancion.innerText = "🔒 Canción privada protegida";
+      } else {
+        if (musica.paused) {
+          btnAudio.innerText = "🎵 Reproducir Música";
+          subtituloCancion.innerText = "🎵 Canción pausada";
+        } else {
+          btnAudio.innerText = "⏸️ Pausar Música";
+          subtituloCancion.innerText = "🎵 \"Escuchando nuestra melodía favorita\"";
+        }
+      }
+    }
+
+    function gestionarMusica() {
+      if (!musicaDesbloqueada) {
+        const passwordIngresada = prompt("Ingresa la contraseña privada para reproducir la canción:");
+        if (passwordIngresada === CLAVE_CORRECTA) {
+          musicaDesbloqueada = true;
+          localStorage.setItem('michi_musica_auth', 'true');
+          alert("¡Acceso concedido! Reproduciendo canción privada.");
+          musica.play();
+        } else if (passwordIngresada !== null) {
+          alert("Contraseña incorrecta. Acceso denegado.");
+        }
+      } else {
+        if (musica.paused) {
+          musica.play();
+        } else {
+          musica.pause();
+        }
+      }
+      actualizarEstadoBotonMusica();
+    }
+
     function guardar() {
-      localStorage.setItem('michi_v8_hambre', hambre);
-      localStorage.setItem('michi_v8_felicidad', felicidad);
+      localStorage.setItem('michi_v9_hambre', hambre);
+      localStorage.setItem('michi_v9_felicidad', felicidad);
     }
 
     function mostrarTexto(msg) {
@@ -612,6 +688,7 @@
 
     window.addEventListener('load', () => {
       actualizarInterfaz();
+      actualizarEstadoBotonMusica();
       lanzarsorpresaInicial();
     });
   </script>
