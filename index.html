@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michi - Mi Mascota Virtual</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    body {
+      background-color: #2b2b2b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .consola {
+      background-color: #ff6b6b;
+      padding: 30px;
+      border-radius: 40px;
+      box-shadow: 0 10px 0 #c0392b;
+      width: 320px;
+      text-align: center;
+    }
+
+    .nombre-mascota {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      text-shadow: 2px 2px 0px #c0392b;
+    }
+
+    .pantalla {
+      background-color: #a8e6cf;
+      border: 4px solid #1d3557;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .mascota {
+      font-size: 65px;
+      margin: 15px 0;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+
+    .barras {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .barra-info {
+      font-size: 12px;
+      font-weight: bold;
+      color: #1d3557;
+      text-align: left;
+    }
+
+    .progreso {
+      background-color: #d8e2dc;
+      border-radius: 10px;
+      height: 12px;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid #1d3557;
+      margin-top: 3px;
+    }
+
+    .relleno {
+      background-color: #ff8b94;
+      height: 100%;
+      width: 100%;
+      transition: width 0.3s;
+    }
+
+    .controles {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button {
+      background-color: #ffeaa7;
+      border: none;
+      border-bottom: 4px solid #fdcb6e;
+      padding: 10px 15px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #2d3436;
+      transition: all 0.1s;
+    }
+
+    button:active {
+      transform: translateY(2px);
+      border-bottom-width: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="consola">
+    <div class="nombre-mascota">Michi</div>
+
+    <div class="pantalla">
+      <div class="mascota" id="pet">(◕‿◕)</div>
+      <div class="barras">
+        <div class="barra-info">
+          <span>Hambre</span>
+          <div class="progreso"><div class="relleno" id="bar-hambre"></div></div>
+        </div>
+        <div class="barra-info">
+          <span>Felicidad</span>
+          <div class="progreso"><div class="relleno" id="bar-felicidad"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controles">
+      <button onclick="alimentar()">Comer</button>
+      <button onclick="jugar()">Jugar</button>
+      <button onclick="reiniciar()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let hambre = parseInt(localStorage.getItem('michi_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_felicidad')) || 100;
+
+    const pet = document.getElementById('pet');
+    const barHambre = document.getElementById('bar-hambre');
+    const barFelicidad = document.getElementById('bar-felicidad');
+
+    function guardar() {
+      localStorage.setItem('michi_hambre', hambre);
+      localStorage.setItem('michi_felicidad', felicidad);
+    }
+
+    function actualizarInterfaz() {
+      barHambre.style.width = hambre + '%';
+      barFelicidad.style.width = felicidad + '%';
+
+      if (hambre <= 0 || felicidad <= 0) {
+        pet.innerText = '(x_x)';
+      } else if (hambre < 40 || felicidad < 40) {
+        pet.innerText = '(´;︵;`)';
+      } else {
+        pet.innerText = '(◕‿◕)';
+      }
+    }
+
+    function alimentar() {
+      if (hambre <= 0 || felicidad <= 0) return;
+      hambre = Math.min(100, hambre + 15);
+      guardar();
+      actualizarInterfaz();
+    }
+
+    function jugar() {
+      if (hambre <= 0 || felicidad <= 0) return;
+      felicidad = Math.min(100, felicidad + 15);
+      hambre = Math.max(0, hambre - 5);
+      guardar();
+      actualizarInterfaz();
+    }
+
+    function reiniciar() {
+      hambre = 100;
+      felicidad = 100;
+      guardar();
+      actualizarInterfaz();
+    }
+
+    // El hambre y la felicidad bajan solos cada 7 segundos (7000 ms)
+    setInterval(() => {
+      if (hambre > 0 && felicidad > 0) {
+        hambre = Math.max(0, hambre - 2);
+        felicidad = Math.max(0, felicidad - 2);
+        guardar();
+        actualizarInterfaz();
+      }
+    }, 7000);
+
+    actualizarInterfaz();
+  </script>
+</body>
+</html>
