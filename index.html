@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Michi - Mi Mascota Virtual</title>
+  <title>Michi - Virtual Pet</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-      background-color: #2b2b2b;
+      background: #1e1b4b;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,89 +21,104 @@
     }
 
     .consola {
-      background-color: #ff6b6b;
-      padding: 30px;
-      border-radius: 40px;
-      box-shadow: 0 10px 0 #c0392b;
-      width: 320px;
+      background: #312e81;
+      padding: 24px;
+      border-radius: 32px;
+      box-shadow: 0 12px 0 #1e1b4b, 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      width: 340px;
       text-align: center;
+      border: 4px solid #4338ca;
     }
 
     .nombre-mascota {
-      color: #ffffff;
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      text-shadow: 2px 2px 0px #c0392b;
+      color: #e0e7ff;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
     }
 
     .pantalla {
-      background-color: #a8e6cf;
-      border: 4px solid #1d3557;
-      border-radius: 15px;
+      background: linear-gradient(180deg, #c7d2fe 0%, #e0e7ff 100%);
+      border: 4px solid #312e81;
+      border-radius: 20px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+      position: relative;
     }
 
-    .mascota {
-      font-size: 65px;
-      margin: 15px 0;
-      user-select: none;
-      transition: transform 0.2s;
+    .contenedor-michi {
+      width: 140px;
+      height: 140px;
+      margin: 10px auto 20px auto;
+      transition: transform 0.2s ease;
+    }
+
+    .contenedor-michi:hover {
+      transform: scale(1.05);
     }
 
     .barras {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .barra-info {
-      font-size: 12px;
-      font-weight: bold;
-      color: #1d3557;
+      font-size: 13px;
+      font-weight: 700;
+      color: #312e81;
       text-align: left;
     }
 
     .progreso {
-      background-color: #d8e2dc;
-      border-radius: 10px;
-      height: 12px;
+      background-color: #a5b4fc;
+      border-radius: 12px;
+      height: 14px;
       width: 100%;
       overflow: hidden;
-      border: 1px solid #1d3557;
-      margin-top: 3px;
+      border: 2px solid #312e81;
+      margin-top: 4px;
     }
 
     .relleno {
-      background-color: #ff8b94;
+      background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
       height: 100%;
       width: 100%;
-      transition: width 0.3s;
+      transition: width 0.4s ease;
+    }
+
+    #bar-felicidad {
+      background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
     }
 
     .controles {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
     }
 
     button {
-      background-color: #ffeaa7;
+      background-color: #818cf8;
+      color: #ffffff;
       border: none;
-      border-bottom: 4px solid #fdcb6e;
-      padding: 10px 15px;
-      font-weight: bold;
-      border-radius: 10px;
+      border-bottom: 4px solid #4f46e5;
+      padding: 12px 16px;
+      font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
-      color: #2d3436;
-      transition: all 0.1s;
+      flex: 1;
+      transition: all 0.1s ease;
     }
 
     button:active {
       transform: translateY(2px);
       border-bottom-width: 2px;
+    }
+
+    .btn-reset {
+      background-color: #f87171;
+      border-bottom-color: #dc2626;
     }
   </style>
 </head>
@@ -113,7 +128,38 @@
     <div class="nombre-mascota">Michi</div>
 
     <div class="pantalla">
-      <div class="mascota" id="pet">(◕‿◕)</div>
+      <!-- Personaje SVG de Michi -->
+      <div class="contenedor-michi">
+        <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
+          <!-- Antenas -->
+          <line x1="35" y1="30" x2="25" y2="15" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="25" cy="15" r="4" fill="#34d399"/>
+          
+          <line x1="65" y1="30" x2="75" y2="15" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="75" cy="15" r="4" fill="#34d399"/>
+
+          <!-- Cuerpo tipo Blob -->
+          <path d="M20,60 Q15,25 50,25 Q85,25 80,60 Q85,90 50,90 Q15,90 20,60 Z" fill="#34d399" stroke="#059669" stroke-width="3"/>
+          
+          <!-- Manchas decorativas -->
+          <circle cx="35" cy="75" r="5" fill="#10b981" opacity="0.5"/>
+          <circle cx="65" cy="70" r="7" fill="#10b981" opacity="0.5"/>
+
+          <!-- Ojos (Normales por defecto) -->
+          <g id="ojos">
+            <!-- Ojo Izquierdo -->
+            <circle cx="38" cy="48" r="7" fill="#ffffff"/>
+            <circle cx="38" cy="48" r="3" fill="#1e1b4b"/>
+            <!-- Ojo Derecho -->
+            <circle cx="62" cy="48" r="7" fill="#ffffff"/>
+            <circle cx="62" cy="48" r="3" fill="#1e1b4b"/>
+          </g>
+
+          <!-- Boca (Feliz por defecto) -->
+          <path id="boca" d="M 40 62 Q 50 70 60 62" fill="transparent" stroke="#1e1b4b" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+
       <div class="barras">
         <div class="barra-info">
           <span>Hambre</span>
@@ -129,7 +175,7 @@
     <div class="controles">
       <button onclick="alimentar()">Comer</button>
       <button onclick="jugar()">Jugar</button>
-      <button onclick="reiniciar()">Reset</button>
+      <button class="btn-reset" onclick="reiniciar()">Reset</button>
     </div>
   </div>
 
@@ -137,9 +183,10 @@
     let hambre = parseInt(localStorage.getItem('michi_hambre')) || 100;
     let felicidad = parseInt(localStorage.getItem('michi_felicidad')) || 100;
 
-    const pet = document.getElementById('pet');
     const barHambre = document.getElementById('bar-hambre');
     const barFelicidad = document.getElementById('bar-felicidad');
+    const ojos = document.getElementById('ojos');
+    const boca = document.getElementById('boca');
 
     function guardar() {
       localStorage.setItem('michi_hambre', hambre);
@@ -150,12 +197,32 @@
       barHambre.style.width = hambre + '%';
       barFelicidad.style.width = felicidad + '%';
 
+      // Cambiar la expresión facial según el estado
       if (hambre <= 0 || felicidad <= 0) {
-        pet.innerText = '(x_x)';
+        // Estado: Triste / Derrotado
+        ojos.innerHTML = `
+          <text x="32" y="53" font-size="12" font-weight="bold" fill="#1e1b4b">X</text>
+          <text x="56" y="53" font-size="12" font-weight="bold" fill="#1e1b4b">X</text>
+        `;
+        boca.setAttribute('d', 'M 40 68 Q 50 60 60 68'); // Boca triste
       } else if (hambre < 40 || felicidad < 40) {
-        pet.innerText = '(´;︵;`)';
+        // Estado: Preocupado
+        ojos.innerHTML = `
+          <circle cx="38" cy="48" r="6" fill="#ffffff"/>
+          <circle cx="38" cy="48" r="2" fill="#1e1b4b"/>
+          <circle cx="62" cy="48" r="6" fill="#ffffff"/>
+          <circle cx="62" cy="48" r="2" fill="#1e1b4b"/>
+        `;
+        boca.setAttribute('d', 'M 42 65 L 58 65'); // Boca recta
       } else {
-        pet.innerText = '(◕‿◕)';
+        // Estado: Feliz
+        ojos.innerHTML = `
+          <circle cx="38" cy="48" r="7" fill="#ffffff"/>
+          <circle cx="38" cy="48" r="3" fill="#1e1b4b"/>
+          <circle cx="62" cy="48" r="7" fill="#ffffff"/>
+          <circle cx="62" cy="48" r="3" fill="#1e1b4b"/>
+        `;
+        boca.setAttribute('d', 'M 40 62 Q 50 70 60 62'); // Boca sonriente
       }
     }
 
@@ -181,7 +248,7 @@
       actualizarInterfaz();
     }
 
-    // El hambre y la felicidad bajan solos cada 7 segundos (7000 ms)
+    // Descuento de stats cada 7 segundos (7000 ms)
     setInterval(() => {
       if (hambre > 0 && felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
