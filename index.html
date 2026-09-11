@@ -181,7 +181,11 @@
     }
 
     .michi-wrapper.eat-wiggle {
-      animation: wiggle 0.5s ease;
+      animation: chew 0.8s ease;
+    }
+
+    .michi-wrapper.catch-ball {
+      animation: catchJump 0.8s ease;
     }
 
     .michi-wrapper.surprise-entry {
@@ -200,10 +204,47 @@
       60% { transform: translateY(0) scale(0.95, 1.05); }
     }
 
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      25% { transform: rotate(-8deg) scale(1.05); }
-      75% { transform: rotate(8deg) scale(1.05); }
+    @keyframes chew {
+      0%, 100% { transform: scale(1); }
+      20% { transform: scale(1.08, 0.92) translateY(5px); }
+      40% { transform: scale(0.95, 1.05) translateY(-3px); }
+      60% { transform: scale(1.05, 0.95) translateY(3px); }
+      80% { transform: scale(0.98, 1.02); }
+    }
+
+    @keyframes catchJump {
+      0% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-35px) rotate(-8deg) scale(1.1); }
+      60% { transform: translateY(-10px) rotate(5deg) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .animated-item {
+      position: absolute;
+      font-size: 32px;
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    .anim-fish {
+      animation: dropFish 0.6s forwards cubic-bezier(0.5, 0, 0.75, 0);
+    }
+
+    @keyframes dropFish {
+      0% { transform: translateY(-120px) rotate(0deg) scale(1.2); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateY(20px) rotate(180deg) scale(0.4); opacity: 0; }
+    }
+
+    .anim-ball {
+      animation: throwBall 0.8s forwards ease-out;
+    }
+
+    @keyframes throwBall {
+      0% { transform: translate(-140px, 60px) rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: translate(-40px, -40px) rotate(180deg) scale(1.2); }
+      80% { transform: translate(0px, 10px) rotate(360deg) scale(0.9); opacity: 1; }
+      100% { transform: translate(10px, 20px) rotate(400deg) scale(0.2); opacity: 0; }
     }
 
     .shadow {
@@ -289,34 +330,37 @@
     </div>
   </div>
 
-  <div class="stage">
+  <div class="stage" id="stage-area">
     <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para mimarme o aprender algo nuevo 🐾</div>
     
     <div class="michi-wrapper surprise-entry" id="michi-box" onclick="acariciar(event)">
       <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <!-- Cola atigrada -->
+        <!-- Cola -->
         <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#e67e22" stroke-width="5" stroke-linecap="round">
           <animateTransform attributeName="transform" type="rotate" values="0 75 75; 8 75 75; 0 75 75" dur="2s" repeatCount="indefinite"/>
         </path>
 
-        <!-- Oreja Izquierda (Naranja por fuera, rosada centro) -->
+        <!-- Patitas traseras -->
+        <ellipse cx="28" cy="78" rx="7" ry="5" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
+        <ellipse cx="72" cy="78" rx="7" ry="5" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
+
+        <!-- Orejas -->
         <polygon points="22,40 12,18 36,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
         <polygon points="24,36 17,22 33,28" fill="#f2a685"/>
         
-        <!-- Oreja Derecha -->
         <polygon points="78,40 88,18 64,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
         <polygon points="76,36 83,22 67,28" fill="#f2a685"/>
 
         <!-- Cabeza Base Naranja -->
         <ellipse cx="50" cy="58" rx="32" ry="28" fill="#e67e22" stroke="#d35400" stroke-width="2"/>
 
-        <!-- Mancha Blanca en Cara (Hocico y Frente estilo gato de la foto) -->
+        <!-- Mancha Blanca -->
         <path d="M 50 42 C 40 46 38 62 38 72 C 44 80 56 80 62 72 C 62 62 60 46 50 42 Z" fill="#ffffff"/>
 
-        <!-- Rayas Naranjas en la frente -->
+        <!-- Rayas en frente -->
         <path d="M 44 38 L 47 44 M 50 36 L 50 43 M 56 38 L 53 44" stroke="#d35400" stroke-width="2" stroke-linecap="round"/>
 
-        <!-- Rubor Mejillas -->
+        <!-- Rubor -->
         <ellipse cx="30" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
         <ellipse cx="70" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
 
@@ -328,22 +372,28 @@
           <line x1="86" y1="66" x2="73" y2="65" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
         </g>
 
-        <!-- Nariz Rosada -->
+        <!-- Nariz -->
         <polygon points="48,59 52,59 50,62" fill="#e8a7a1"/>
 
-        <!-- Ojos Verde/Dorado -->
+        <!-- Ojos en Tono Café/Oscuro Natural -->
         <g id="ojos">
-          <circle cx="37" cy="53" r="5" fill="#85a363"/>
-          <circle cx="37" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
+          <circle cx="37" cy="53" r="3" fill="#1f110b"/>
           <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
 
-          <circle cx="63" cy="53" r="5" fill="#85a363"/>
-          <circle cx="63" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="63" cy="53" r="5" fill="#5c3d2e"/>
+          <circle cx="63" cy="53" r="3" fill="#1f110b"/>
           <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
         </g>
 
         <!-- Boca -->
         <path id="boca" d="M 45 64 Q 50 67 55 64" fill="none" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round"/>
+
+        <!-- Patitas delanteras -->
+        <g id="patitas">
+          <ellipse cx="42" cy="78" rx="5" ry="4" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
+          <ellipse cx="58" cy="78" rx="5" ry="4" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
+        </g>
       </svg>
     </div>
 
@@ -351,19 +401,19 @@
   </div>
 
   <div class="controls">
-    <button class="btn" onclick="alimentar()">
+    <button class="btn" id="btn-comer" onclick="alimentar()">
       <span class="btn-icon">🐟</span>
       <span>Comer</span>
     </button>
-    <button class="btn" onclick="jugar()">
+    <button class="btn" id="btn-jugar" onclick="jugar()">
       <span class="btn-icon">🎾</span>
       <span>Jugar</span>
     </button>
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v6_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v6_felicidad')) || 100;
+    let hambre = parseInt(localStorage.getItem('michi_v8_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v8_felicidad')) || 100;
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
@@ -373,6 +423,7 @@
     const boca = document.getElementById('boca');
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
+    const stageArea = document.getElementById('stage-area');
 
     const frasesComer = [
       "🐟 ¡Mmm... delicioso!",
@@ -384,8 +435,8 @@
     const frasesJugar = [
       "🎾 ¡Sí! Me encanta este juego.",
       "😸 ¡Qué divertido!",
-      "🎾 ¡A atrapar la pelota!",
-      "🐾 ¡Atrapado!"
+      "🎾 ¡Atrapé la pelota!",
+      "🐾 ¡Buen tiro!"
     ];
 
     const sabiduriaGatuna = [
@@ -399,8 +450,8 @@
     ];
 
     function guardar() {
-      localStorage.setItem('michi_v6_hambre', hambre);
-      localStorage.setItem('michi_v6_felicidad', felicidad);
+      localStorage.setItem('michi_v8_hambre', hambre);
+      localStorage.setItem('michi_v8_felicidad', felicidad);
     }
 
     function mostrarTexto(msg) {
@@ -437,8 +488,8 @@
         }
       } else if (hambre < 40 || felicidad < 40) {
         ojos.innerHTML = `
-          <circle cx="37" cy="53" r="3.5" fill="#2c3e50"/>
-          <circle cx="63" cy="53" r="3.5" fill="#2c3e50"/>
+          <circle cx="37" cy="53" r="3.5" fill="#1f110b"/>
+          <circle cx="63" cy="53" r="3.5" fill="#1f110b"/>
         `;
         boca.setAttribute('d', 'M 45 65 L 55 65');
         
@@ -453,11 +504,11 @@
         }
       } else {
         ojos.innerHTML = `
-          <circle cx="37" cy="53" r="5" fill="#85a363"/>
-          <circle cx="37" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
+          <circle cx="37" cy="53" r="3" fill="#1f110b"/>
           <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
-          <circle cx="63" cy="53" r="5" fill="#85a363"/>
-          <circle cx="63" cy="53" r="3" fill="#2c3e50"/>
+          <circle cx="63" cy="53" r="5" fill="#5c3d2e"/>
+          <circle cx="63" cy="53" r="3" fill="#1f110b"/>
           <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
         `;
         boca.setAttribute('d', 'M 45 64 Q 50 67 55 64');
@@ -468,7 +519,7 @@
     }
 
     function triggerAnim(className) {
-      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'surprise-entry');
+      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'catch-ball', 'surprise-entry');
       void michiBox.offsetWidth;
       michiBox.classList.add(className);
     }
@@ -505,16 +556,39 @@
       hambre = Math.min(100, hambre + 25);
       if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
       guardar();
-      triggerAnim('eat-wiggle');
-      actualizarInterfaz(obtenerElementoAleatorio(frasesComer));
+
+      const fish = document.createElement('div');
+      fish.className = 'animated-item anim-fish';
+      fish.innerText = '🐟';
+      stageArea.appendChild(fish);
+
+      boca.setAttribute('d', 'M 44 63 Q 50 72 56 63');
+
+      setTimeout(() => {
+        triggerAnim('eat-wiggle');
+        fish.remove();
+        actualizarInterfaz(obtenerElementoAleatorio(frasesComer));
+      }, 500);
     }
 
     function jugar() {
       felicidad = Math.min(100, felicidad + 25);
       hambre = Math.max(0, hambre - 5);
       guardar();
-      triggerAnim('happy-bounce');
-      actualizarInterfaz(obtenerElementoAleatorio(frasesJugar));
+
+      const ball = document.createElement('div');
+      ball.className = 'animated-item anim-ball';
+      ball.innerText = '🎾';
+      stageArea.appendChild(ball);
+
+      setTimeout(() => {
+        triggerAnim('catch-ball');
+      }, 200);
+
+      setTimeout(() => {
+        ball.remove();
+        actualizarInterfaz(obtenerElementoAleatorio(frasesJugar));
+      }, 700);
     }
 
     function acariciar(e) {
