@@ -26,7 +26,6 @@
       position: relative;
     }
 
-    /* Partículas de fondo flotantes */
     .bg-particle {
       position: absolute;
       background: rgba(255, 255, 255, 0.7);
@@ -40,7 +39,6 @@
       50% { transform: translateY(-30px) scale(1.1); opacity: 0.9; }
     }
 
-    /* Encabezado superior libre */
     .header {
       width: 100%;
       max-width: 400px;
@@ -109,7 +107,6 @@
       background: linear-gradient(90deg, #fbbf24, #f59e0b);
     }
 
-    /* Área Central - Personaje Flotante */
     .stage {
       flex: 1;
       width: 100%;
@@ -122,20 +119,21 @@
       z-index: 5;
     }
 
-    /* Bocadillo de Texto */
     .speech-bubble {
       background: #ffffff;
       color: #713f12;
-      padding: 10px 18px;
+      padding: 12px 18px;
       border-radius: 20px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
+      line-height: 1.4;
       box-shadow: 0 10px 25px rgba(202, 138, 4, 0.12);
       margin-bottom: 20px;
       position: relative;
       border: 2px solid #eab308;
-      max-width: 85%;
+      max-width: 90%;
       text-align: center;
+      transition: transform 0.2s ease;
     }
 
     .speech-bubble::after {
@@ -164,7 +162,6 @@
       width: 0;
     }
 
-    /* Animaciones de Michi */
     .michi-wrapper {
       width: 180px;
       height: 180px;
@@ -187,6 +184,16 @@
       animation: wiggle 0.5s ease;
     }
 
+    .michi-wrapper.surprise-entry {
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+      70% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
     @keyframes bounce {
       0%, 100% { transform: translateY(0) scale(1); }
       30% { transform: translateY(-25px) scale(1.1, 0.9); }
@@ -199,7 +206,6 @@
       75% { transform: rotate(8deg) scale(1.05); }
     }
 
-    /* Sombra proyectada en el piso */
     .shadow {
       width: 120px;
       height: 16px;
@@ -214,7 +220,6 @@
       50% { transform: scale(0.75); opacity: 0.25; }
     }
 
-    /* Panel de Botones Inferior */
     .controls {
       width: 100%;
       max-width: 400px;
@@ -228,16 +233,16 @@
       background: #ffffff;
       color: #854d0e;
       border: none;
-      padding: 14px 10px;
+      padding: 16px 10px;
       border-radius: 20px;
       font-weight: 800;
-      font-size: 15px;
+      font-size: 16px;
       box-shadow: 0 8px 20px rgba(202, 138, 4, 0.15);
       cursor: pointer;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 8px;
       transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       border: 2px solid rgba(255, 255, 255, 0.8);
       touch-action: manipulation;
@@ -249,37 +254,29 @@
     }
 
     .btn-icon {
-      font-size: 20px;
+      font-size: 22px;
     }
 
-    .btn-reset {
-      background: rgba(255, 255, 255, 0.7);
-      color: #713f12;
-    }
-
-    /* Efectos de Partículas al hacer clic */
-    .heart-particle {
+    .confetti-particle, .heart-particle {
       position: absolute;
-      font-size: 20px;
       pointer-events: none;
-      animation: floatHeart 1s forwards ease-out;
+      animation: floatUp 1.2s forwards ease-out;
+      z-index: 20;
     }
 
-    @keyframes floatHeart {
-      0% { opacity: 1; transform: translateY(0) scale(0.8); }
-      100% { opacity: 0; transform: translateY(-50px) scale(1.3); }
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(0.8) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(-70px) scale(1.4) rotate(45deg); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Fondo Decorativo -->
   <div class="bg-particle" style="width: 80px; height: 80px; top: 10%; left: 10%;"></div>
   <div class="bg-particle" style="width: 120px; height: 120px; top: 60%; right: 5%; animation-delay: -3s;"></div>
 
-  <!-- Encabezado y Barras de Progreso -->
   <div class="header">
-    <div class="nombre-mascota">MICHI</div>
+    <div class="nombre-mascota">Michi</div>
     <div class="barras-container">
       <div class="barra-item">
         <div class="barra-label"><span>Hambre</span><span id="txt-hambre">100%</span></div>
@@ -292,32 +289,26 @@
     </div>
   </div>
 
-  <!-- Zona Central del Personaje -->
   <div class="stage">
-    <div class="speech-bubble" id="bocadillo">¡Hola! Soy Michi 🐾</div>
+    <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para aprender algo nuevo 🐾</div>
     
-    <div class="michi-wrapper" id="michi-box" onclick="acariciar(event)">
+    <div class="michi-wrapper surprise-entry" id="michi-box" onclick="acariciar(event)">
       <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <!-- Cola con movimiento propio -->
         <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#f4a261" stroke-width="5" stroke-linecap="round">
           <animateTransform attributeName="transform" type="rotate" values="0 75 75; 8 75 75; 0 75 75" dur="2s" repeatCount="indefinite"/>
         </path>
 
-        <!-- Orejas -->
         <polygon points="22,40 12,18 36,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
         <polygon points="24,36 17,22 33,28" fill="#ffb703"/>
         
         <polygon points="78,40 88,18 64,28" fill="#f4a261" stroke="#e76f51" stroke-width="2"/>
         <polygon points="76,36 83,22 67,28" fill="#ffb703"/>
 
-        <!-- Cuerpo / Cabeza de Michi -->
         <ellipse cx="50" cy="58" rx="32" ry="28" fill="#f4a261" stroke="#e76f51" stroke-width="2.5"/>
 
-        <!-- Mofletes rosados -->
         <ellipse cx="32" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
         <ellipse cx="68" cy="62" rx="5" ry="3" fill="#ffb5a7" opacity="0.8"/>
 
-        <!-- Bigotes con suave parpadeo/animación -->
         <g>
           <line x1="18" y1="58" x2="30" y2="60" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="16" y1="64" x2="29" y2="63" stroke="#2b2d42" stroke-width="1.5" stroke-linecap="round"/>
@@ -326,10 +317,8 @@
           <animateTransform attributeName="transform" type="translate" values="0,0; 0,1; 0,0" dur="3s" repeatCount="indefinite"/>
         </g>
 
-        <!-- Nariz -->
         <polygon points="48,58 52,58 50,60" fill="#e76f51"/>
 
-        <!-- Ojos -->
         <g id="ojos">
           <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
           <circle cx="36.5" cy="50.5" r="1.5" fill="#ffffff"/>
@@ -337,16 +326,13 @@
           <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
         </g>
 
-        <!-- Boca -->
         <path id="boca" d="M 45 62 Q 50 66 55 62" fill="none" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
 
-    <!-- Sombra del personaje -->
     <div class="shadow"></div>
   </div>
 
-  <!-- Botones Flotantes Inferiores -->
   <div class="controls">
     <button class="btn" onclick="alimentar()">
       <span class="btn-icon">🐟</span>
@@ -356,14 +342,11 @@
       <span class="btn-icon">🎾</span>
       <span>Jugar</span>
     </button>
-    <button class="btn btn-reset" onclick="reiniciar()">
-      <span>Reset</span>
-    </button>
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v3_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v3_felicidad')) || 100;
+    let hambre = parseInt(localStorage.getItem('michi_v5_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v5_felicidad')) || 100;
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
@@ -374,16 +357,30 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
 
+    const sabiduriaGatuna = [
+      "💡 Cuidado real: Nunca le des leche de vaca a un gato adulto, no la digieren bien.",
+      "📜 Historia: En el Antiguo Egipto, los gatos eran sagrados y protegían las cosechas.",
+      "💡 Cuidado real: Los gatos prefieren su agua lejos de su plato de comida.",
+      "📜 Historia: El maullido fue desarrollado por los gatos solo para comunicarse con los humanos.",
+      "💡 Cuidado real: Cepillar a tu gato seguido evita que trague tantas bolas de pelo.",
+      "📜 Historia: Un gato en la Edad Media era el mejor protector de los graneros contra plagas.",
+      "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
+    ];
+
     function guardar() {
-      localStorage.setItem('michi_v3_hambre', hambre);
-      localStorage.setItem('michi_v3_felicidad', felicidad);
+      localStorage.setItem('michi_v5_hambre', hambre);
+      localStorage.setItem('michi_v5_felicidad', felicidad);
     }
 
     function mostrarTexto(msg) {
       bocadillo.innerText = msg;
     }
 
-    function actualizarInterfaz() {
+    function obtenerConsejoAleatorio() {
+      return sabiduriaGatuna[Math.floor(Math.random() * sabiduriaGatuna.length)];
+    }
+
+    function actualizarInterfaz(mensajePersonalizado = null) {
       fillHambre.style.width = hambre + '%';
       fillFelicidad.style.width = felicidad + '%';
       txtHambre.innerText = hambre + '%';
@@ -397,14 +394,32 @@
           <path d="M 58 48 L 66 54" stroke="#2b2d42" stroke-width="2" stroke-linecap="round"/>
         `;
         boca.setAttribute('d', 'M 45 66 Q 50 61 55 66');
-        mostrarTexto('¡Tengo mucha hambre y sueño! 😿');
+        
+        if (mensajePersonalizado) {
+          mostrarTexto(mensajePersonalizado);
+        } else if (hambre <= 0 && felicidad <= 0) {
+          mostrarTexto("😿 ¡Tengo mucha hambre y pena! Toca 'Comer' 🐟 y 'Jugar' 🎾");
+        } else if (hambre <= 0) {
+          mostrarTexto("😾 ¡No tengo energía! Toca el botón 'Comer' 🐟");
+        } else {
+          mostrarTexto("😿 Estoy muy triste... Presiona 'Jugar' 🎾");
+        }
       } else if (hambre < 40 || felicidad < 40) {
         ojos.innerHTML = `
           <circle cx="38" cy="52" r="3.5" fill="#2b2d42"/>
           <circle cx="62" cy="52" r="3.5" fill="#2b2d42"/>
         `;
         boca.setAttribute('d', 'M 45 64 L 55 64');
-        mostrarTexto('Me siento un poco mal... 😿');
+        
+        if (mensajePersonalizado) {
+          mostrarTexto(mensajePersonalizado);
+        } else if (hambre < 40 && felicidad < 40) {
+          mostrarTexto("🙀 Presiona 'Comer' 🐟 para alimentarme y 'Jugar' 🎾 para alegrarme.");
+        } else if (hambre < 40) {
+          mostrarTexto("😾 Me da hambre... ¡Presiona el botón 'Comer' 🐟!");
+        } else {
+          mostrarTexto("😿 Me estoy aburriendo... Presiona 'Jugar' 🎾.");
+        }
       } else {
         ojos.innerHTML = `
           <circle cx="38" cy="52" r="4.5" fill="#2b2d42"/>
@@ -413,13 +428,33 @@
           <circle cx="60.5" cy="50.5" r="1.5" fill="#ffffff"/>
         `;
         boca.setAttribute('d', 'M 45 62 Q 50 66 55 62');
+        if (mensajePersonalizado) {
+          mostrarTexto(mensajePersonalizado);
+        }
       }
     }
 
     function triggerAnim(className) {
-      michiBox.classList.remove('happy-bounce', 'eat-wiggle');
-      void michiBox.offsetWidth; // Forzar reinicio de animación
+      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'surprise-entry');
+      void michiBox.offsetWidth;
       michiBox.classList.add(className);
+    }
+
+    function lanzarsorpresaInicial() {
+      const emojis = ['🎉', '💛', '🐾', '🎈', '💖'];
+      const rect = michiBox.getBoundingClientRect();
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          const p = document.createElement('div');
+          p.className = 'confetti-particle';
+          p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+          p.style.fontSize = (18 + Math.random() * 14) + 'px';
+          p.style.left = (rect.left + rect.width / 2 + (Math.random() * 120 - 60)) + 'px';
+          p.style.top = (rect.top + rect.height / 2 + (Math.random() * 40 - 20)) + 'px';
+          document.body.appendChild(p);
+          setTimeout(() => p.remove(), 1200);
+        }, i * 80);
+      }
     }
 
     function spawnHeart(e) {
@@ -434,50 +469,33 @@
     }
 
     function alimentar() {
-      if (hambre <= 0 || felicidad <= 0) {
-        mostrarTexto('Primero debes reiniciar a Michi 😿');
-        return;
-      }
-      hambre = Math.min(100, hambre + 15);
+      hambre = Math.min(100, hambre + 25);
+      if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
       guardar();
-      actualizarInterfaz();
       triggerAnim('eat-wiggle');
-      mostrarTexto('¡Yummy! Delicioso 🐟');
+      actualizarInterfaz('🐟 ¡Yummy! Tip: Los gatos necesitan alimentos ricos en proteína.');
     }
 
     function jugar() {
-      if (hambre <= 0 || felicidad <= 0) {
-        mostrarTexto('Michi no tiene energía 😿');
-        return;
-      }
-      felicidad = Math.min(100, felicidad + 15);
+      felicidad = Math.min(100, felicidad + 25);
       hambre = Math.max(0, hambre - 5);
       guardar();
-      actualizarInterfaz();
       triggerAnim('happy-bounce');
-      mostrarTexto('¡Qué divertido! 🎉');
+      actualizarInterfaz('🎾 ¡Qué divertido! Jugar despierta el instinto cazador del gato.');
     }
 
     function acariciar(e) {
-      if (hambre > 0 && felicidad > 0) {
-        spawnHeart(e);
-        triggerAnim('happy-bounce');
-        mostrarTexto('¡Purr... te quiero! 😻');
+      spawnHeart(e);
+      triggerAnim('happy-bounce');
+      if (hambre < 40 || felicidad < 40) {
+        actualizarInterfaz();
+      } else {
+        actualizarInterfaz(obtenerConsejoAleatorio());
       }
     }
 
-    function reiniciar() {
-      hambre = 100;
-      felicidad = 100;
-      guardar();
-      actualizarInterfaz();
-      triggerAnim('happy-bounce');
-      mostrarTexto('¡Michi está feliz de nuevo!');
-    }
-
-    // Decremento pasivo cada 7 segundos
     setInterval(() => {
-      if (hambre > 0 && felicidad > 0) {
+      if (hambre > 0 || felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
         felicidad = Math.max(0, felicidad - 2);
         guardar();
@@ -485,7 +503,10 @@
       }
     }, 7000);
 
-    actualizarInterfaz();
+    window.addEventListener('load', () => {
+      actualizarInterfaz();
+      lanzarsorpresaInicial();
+    });
   </script>
 </body>
 </html>
