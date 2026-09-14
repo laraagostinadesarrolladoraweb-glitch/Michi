@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Michi - Mi Mascota Virtual</title>
   <style>
     * {
@@ -24,8 +24,9 @@
     body {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 12px;
+      padding: 16px 16px max(20px, env(safe-area-inset-bottom));
     }
 
     .bg-particle {
@@ -41,43 +42,22 @@
       50% { transform: translateY(-30px) scale(1.1); opacity: 0.9; }
     }
 
-    /* Panel superior fijo */
+    /* Panel superior: Nombre y Barras de estado */
     .top-panel {
       width: 100%;
       max-width: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
       z-index: 20;
     }
 
     .nombre-mascota {
       color: #b45309;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 1px;
-    }
-
-    .texto-cancion {
-      font-size: 11px;
-      font-weight: 700;
-      color: #92400e;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 2px 10px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .btn-audio {
-      background: #fde68a;
-      font-size: 11px;
-      padding: 5px 10px;
-      border-radius: 10px;
-      border: none;
-      color: #78350f;
-      font-weight: 800;
-      cursor: pointer;
     }
 
     .barras-container {
@@ -85,20 +65,21 @@
       display: flex;
       gap: 10px;
       background: rgba(255, 255, 255, 0.9);
-      padding: 8px 12px;
-      border-radius: 14px;
+      padding: 10px 14px;
+      border-radius: 16px;
       box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
     .barra-item {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
     }
 
     .barra-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
       color: #78350f;
       display: flex;
@@ -107,8 +88,8 @@
 
     .progreso-track {
       background: #fde68a;
-      height: 8px;
-      border-radius: 8px;
+      height: 10px;
+      border-radius: 10px;
       overflow: hidden;
       position: relative;
     }
@@ -116,7 +97,7 @@
     .progreso-fill {
       height: 100%;
       width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: width 0.4s ease;
     }
 
@@ -128,45 +109,7 @@
       background: linear-gradient(90deg, #f59e0b, #d97706);
     }
 
-    /* BOTONES PRINCIPALES VISIBLES */
-    .controls {
-      width: 100%;
-      display: flex;
-      gap: 8px;
-      background: #ffffff;
-      padding: 6px;
-      border-radius: 16px;
-      box-shadow: 0 6px 16px rgba(180, 83, 9, 0.15);
-      border: 2px solid #f59e0b;
-    }
-
-    .btn {
-      flex: 1;
-      background: #fff3c4;
-      color: #78350f;
-      border: none;
-      padding: 10px;
-      border-radius: 12px;
-      font-weight: 900;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      touch-action: manipulation;
-    }
-
-    .btn:active {
-      transform: scale(0.95);
-      background: #fde68a;
-    }
-
-    .btn-icon {
-      font-size: 16px;
-    }
-
-    /* Área central del juego */
+    /* Área central del personaje */
     .stage {
       flex: 1;
       width: 100%;
@@ -182,16 +125,16 @@
     .speech-bubble {
       background: #ffffff;
       color: #78350f;
-      padding: 8px 14px;
+      padding: 10px 16px;
       border-radius: 16px;
       font-weight: 700;
-      font-size: 11px;
-      line-height: 1.3;
+      font-size: 12px;
+      line-height: 1.4;
       box-shadow: 0 6px 16px rgba(180, 83, 9, 0.1);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       position: relative;
       border: 2px solid #f59e0b;
-      max-width: 95%;
+      max-width: 90%;
       text-align: center;
     }
 
@@ -207,8 +150,8 @@
     }
 
     .michi-wrapper {
-      width: 140px;
-      height: 140px;
+      width: 150px;
+      height: 150px;
       cursor: pointer;
       position: relative;
       animation: floatIdle 3.5s infinite ease-in-out;
@@ -261,14 +204,55 @@
     }
 
     .shadow {
-      width: 90px;
+      width: 100px;
       height: 12px;
       background: rgba(180, 83, 9, 0.15);
       border-radius: 50%;
       margin-top: 6px;
     }
 
-    .confetti-particle, .heart-particle {
+    /* Panel Inferior: Botones de Comer y Jugar abajo */
+    .controls {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      gap: 12px;
+      background: #ffffff;
+      padding: 8px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(180, 83, 9, 0.15);
+      border: 2px solid #f59e0b;
+      z-index: 20;
+    }
+
+    .btn {
+      flex: 1;
+      background: #fff3c4;
+      color: #78350f;
+      border: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      touch-action: manipulation;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      background: #fde68a;
+    }
+
+    .btn-icon {
+      font-size: 18px;
+    }
+
+    .heart-particle {
       position: absolute;
       pointer-events: none;
       animation: floatUp 1.2s forwards ease-out;
@@ -283,18 +267,12 @@
 </head>
 <body>
 
-  <audio id="musica-fondo" loop>
-    <source src="cancion.mp3" type="audio/mpeg">
-  </audio>
-
   <div class="bg-particle" style="width: 70px; height: 70px; top: 10%; left: 5%;"></div>
   <div class="bg-particle" style="width: 100px; height: 100px; top: 50%; right: 5%;"></div>
 
-  <!-- TODO EL PANEL DE CONTROL ESTÁ ARRIBA -->
+  <!-- PANEL SUPERIOR: BARRAS Y NOMBRE -->
   <div class="top-panel">
     <div class="nombre-mascota">Michi</div>
-    <div class="texto-cancion" id="subtitulo-cancion">🔒 Canción privada protegida</div>
-    <button class="btn-audio" id="btn-audio" onclick="gestionarMusica()">🔒 Música Privada</button>
 
     <div class="barras-container">
       <div class="barra-item">
@@ -306,20 +284,9 @@
         <div class="progreso-track"><div class="progreso-fill" id="fill-felicidad"></div></div>
       </div>
     </div>
-
-    <!-- BOTONES PRINCIPALES SIEMPRE VISIBLES ARRIBA -->
-    <div class="controls">
-      <button class="btn" id="btn-comer" onclick="alimentar()">
-        <span class="btn-icon">🐟</span>
-        <span>Comer</span>
-      </button>
-      <button class="btn" id="btn-jugar" onclick="jugar()">
-        <span class="btn-icon">🎾</span>
-        <span>Jugar</span>
-      </button>
-    </div>
   </div>
 
+  <!-- ÁREA CENTRAL: PERSONAJE -->
   <div class="stage" id="stage-area">
     <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para mimarme o aprender algo nuevo 🐾</div>
     
@@ -354,10 +321,19 @@
     <div class="shadow"></div>
   </div>
 
-  <script>
-    const CLAVE_CORRECTA = "thelifeofthemichi";
-    let musicaDesbloqueada = localStorage.getItem('michi_musica_auth') === 'true';
+  <!-- PANEL INFERIOR: BOTONES COMER Y JUGAR -->
+  <div class="controls">
+    <button class="btn" id="btn-comer" onclick="alimentar()">
+      <span class="btn-icon">🐟</span>
+      <span>Comer</span>
+    </button>
+    <button class="btn" id="btn-jugar" onclick="jugar()">
+      <span class="btn-icon">🎾</span>
+      <span>Jugar</span>
+    </button>
+  </div>
 
+  <script>
     let hambre = parseInt(localStorage.getItem('michi_v9_hambre')) || 100;
     let felicidad = parseInt(localStorage.getItem('michi_v9_felicidad')) || 100;
 
@@ -370,9 +346,6 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
     const stageArea = document.getElementById('stage-area');
-    const musica = document.getElementById('musica-fondo');
-    const btnAudio = document.getElementById('btn-audio');
-    const subtituloCancion = document.getElementById('subtitulo-cancion');
 
     const frasesComer = [
       "🐟 ¡Mmm... delicioso!",
@@ -397,42 +370,6 @@
       "📜 Historia: Un gato en la Edad Media era el mejor protector de los graneros contra plagas.",
       "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
     ];
-
-    function actualizarEstadoBotonMusica() {
-      if (!musicaDesbloqueada) {
-        btnAudio.innerText = "🔒 Música Privada";
-        subtituloCancion.innerText = "🔒 Canción privada protegida";
-      } else {
-        if (musica.paused) {
-          btnAudio.innerText = "🎵 Reproducir Música";
-          subtituloCancion.innerText = "🎵 Canción pausada";
-        } else {
-          btnAudio.innerText = "⏸️ Pausar Música";
-          subtituloCancion.innerText = "🎵 \"Escuchando nuestra melodía favorita\"";
-        }
-      }
-    }
-
-    function gestionarMusica() {
-      if (!musicaDesbloqueada) {
-        const passwordIngresada = prompt("Ingresa la contraseña privada para reproducir la canción:");
-        if (passwordIngresada === CLAVE_CORRECTA) {
-          musicaDesbloqueada = true;
-          localStorage.setItem('michi_musica_auth', 'true');
-          alert("¡Acceso concedido! Reproduciendo canción privada.");
-          musica.play();
-        } else if (passwordIngresada !== null) {
-          alert("Contraseña incorrecta. Acceso denegado.");
-        }
-      } else {
-        if (musica.paused) {
-          musica.play();
-        } else {
-          musica.pause();
-        }
-      }
-      actualizarEstadoBotonMusica();
-    }
 
     function guardar() {
       localStorage.setItem('michi_v9_hambre', hambre);
@@ -580,7 +517,6 @@
 
     window.addEventListener('load', () => {
       actualizarInterfaz();
-      actualizarEstadoBotonMusica();
     });
   </script>
 </body>
