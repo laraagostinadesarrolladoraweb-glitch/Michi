@@ -14,16 +14,18 @@
       -webkit-user-select: none;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: radial-gradient(circle at center, #fffbeb 0%, #fef3c7 100%);
-      min-height: 100vh;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       align-items: center;
-      padding: 20px 16px;
-      overflow: hidden;
-      position: relative;
+      padding: 12px;
     }
 
     .bg-particle {
@@ -39,45 +41,64 @@
       50% { transform: translateY(-30px) scale(1.1); opacity: 0.9; }
     }
 
-    .header {
+    /* Panel superior fijo */
+    .top-panel {
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
-      z-index: 10;
+      gap: 6px;
+      z-index: 20;
     }
 
     .nombre-mascota {
       color: #b45309;
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 900;
       letter-spacing: 1px;
-      text-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
+    }
+
+    .texto-cancion {
+      font-size: 11px;
+      font-weight: 700;
+      color: #92400e;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 2px 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .btn-audio {
+      background: #fde68a;
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: none;
+      color: #78350f;
+      font-weight: 800;
+      cursor: pointer;
     }
 
     .barras-container {
       width: 100%;
       display: flex;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(10px);
-      padding: 12px 16px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(180, 83, 9, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.9);
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 12px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
     }
 
     .barra-item {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
 
     .barra-label {
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 800;
       color: #78350f;
       display: flex;
@@ -86,8 +107,8 @@
 
     .progreso-track {
       background: #fde68a;
-      height: 12px;
-      border-radius: 10px;
+      height: 8px;
+      border-radius: 8px;
       overflow: hidden;
       position: relative;
     }
@@ -95,7 +116,7 @@
     .progreso-fill {
       height: 100%;
       width: 100%;
-      border-radius: 10px;
+      border-radius: 8px;
       transition: width 0.4s ease;
     }
 
@@ -107,10 +128,49 @@
       background: linear-gradient(90deg, #f59e0b, #d97706);
     }
 
+    /* BOTONES PRINCIPALES VISIBLES */
+    .controls {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(180, 83, 9, 0.15);
+      border: 2px solid #f59e0b;
+    }
+
+    .btn {
+      flex: 1;
+      background: #fff3c4;
+      color: #78350f;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      background: #fde68a;
+    }
+
+    .btn-icon {
+      font-size: 16px;
+    }
+
+    /* Área central del juego */
     .stage {
       flex: 1;
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -122,202 +182,120 @@
     .speech-bubble {
       background: #ffffff;
       color: #78350f;
-      padding: 12px 18px;
-      border-radius: 20px;
+      padding: 8px 14px;
+      border-radius: 16px;
       font-weight: 700;
-      font-size: 13px;
-      line-height: 1.4;
-      box-shadow: 0 10px 25px rgba(180, 83, 9, 0.12);
-      margin-bottom: 20px;
+      font-size: 11px;
+      line-height: 1.3;
+      box-shadow: 0 6px 16px rgba(180, 83, 9, 0.1);
+      margin-bottom: 10px;
       position: relative;
       border: 2px solid #f59e0b;
-      max-width: 90%;
+      max-width: 95%;
       text-align: center;
-      transition: transform 0.2s ease;
     }
 
     .speech-bubble::after {
       content: '';
       position: absolute;
-      bottom: -10px;
+      bottom: -8px;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 10px 10px 0;
+      border-width: 8px 8px 0;
       border-style: solid;
       border-color: #ffffff transparent;
-      display: block;
-      width: 0;
-    }
-
-    .speech-bubble::before {
-      content: '';
-      position: absolute;
-      bottom: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 11px 11px 0;
-      border-style: solid;
-      border-color: #f59e0b transparent;
-      display: block;
-      width: 0;
     }
 
     .michi-wrapper {
-      width: 180px;
-      height: 180px;
+      width: 140px;
+      height: 140px;
       cursor: pointer;
       position: relative;
       animation: floatIdle 3.5s infinite ease-in-out;
-      transition: transform 0.2s ease;
     }
 
     @keyframes floatIdle {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(2deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
     }
 
-    .michi-wrapper.happy-bounce {
-      animation: bounce 0.6s ease;
-    }
-
-    .michi-wrapper.eat-wiggle {
-      animation: chew 0.8s ease;
-    }
-
-    .michi-wrapper.catch-ball {
-      animation: catchJump 0.8s ease;
-    }
-
-    .michi-wrapper.surprise-entry {
-      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-      70% { transform: scale(1.2) rotate(5deg); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg); }
-    }
+    .michi-wrapper.happy-bounce { animation: bounce 0.6s ease; }
+    .michi-wrapper.eat-wiggle { animation: chew 0.8s ease; }
+    .michi-wrapper.catch-ball { animation: catchJump 0.8s ease; }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0) scale(1); }
-      30% { transform: translateY(-25px) scale(1.1, 0.9); }
-      60% { transform: translateY(0) scale(0.95, 1.05); }
+      30% { transform: translateY(-20px) scale(1.1, 0.9); }
     }
 
     @keyframes chew {
       0%, 100% { transform: scale(1); }
-      20% { transform: scale(1.08, 0.92) translateY(5px); }
-      40% { transform: scale(0.95, 1.05) translateY(-3px); }
-      60% { transform: scale(1.05, 0.95) translateY(3px); }
-      80% { transform: scale(0.98, 1.02); }
+      30% { transform: scale(1.08, 0.92); }
+      60% { transform: scale(0.95, 1.05); }
     }
 
     @keyframes catchJump {
-      0% { transform: translateY(0) scale(1); }
-      30% { transform: translateY(-35px) rotate(-8deg) scale(1.1); }
-      60% { transform: translateY(-10px) rotate(5deg) scale(0.95); }
-      100% { transform: translateY(0) scale(1); }
+      0% { transform: translateY(0); }
+      30% { transform: translateY(-25px) rotate(-8deg); }
+      100% { transform: translateY(0); }
     }
 
     .animated-item {
       position: absolute;
-      font-size: 32px;
+      font-size: 28px;
       pointer-events: none;
       z-index: 15;
     }
 
-    .anim-fish {
-      animation: dropFish 0.6s forwards cubic-bezier(0.5, 0, 0.75, 0);
-    }
-
+    .anim-fish { animation: dropFish 0.6s forwards; }
     @keyframes dropFish {
-      0% { transform: translateY(-120px) rotate(0deg) scale(1.2); opacity: 1; }
-      70% { opacity: 1; }
-      100% { transform: translateY(20px) rotate(180deg) scale(0.4); opacity: 0; }
+      0% { transform: translateY(-80px) scale(1.2); opacity: 1; }
+      100% { transform: translateY(10px) scale(0.4); opacity: 0; }
     }
 
-    .anim-ball {
-      animation: throwBall 0.8s forwards ease-out;
-    }
-
+    .anim-ball { animation: throwBall 0.8s forwards; }
     @keyframes throwBall {
-      0% { transform: translate(-140px, 60px) rotate(0deg) scale(1); opacity: 1; }
-      50% { transform: translate(-40px, -40px) rotate(180deg) scale(1.2); }
-      80% { transform: translate(0px, 10px) rotate(360deg) scale(0.9); opacity: 1; }
-      100% { transform: translate(10px, 20px) rotate(400deg) scale(0.2); opacity: 0; }
+      0% { transform: translate(-100px, 40px) scale(1); }
+      50% { transform: translate(-20px, -30px) scale(1.2); }
+      100% { transform: translate(0px, 10px) scale(0.2); opacity: 0; }
     }
 
     .shadow {
-      width: 120px;
-      height: 16px;
+      width: 90px;
+      height: 12px;
       background: rgba(180, 83, 9, 0.15);
       border-radius: 50%;
-      margin-top: 10px;
-      animation: shadowScale 3.5s infinite ease-in-out;
-    }
-
-    @keyframes shadowScale {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(0.75); opacity: 0.25; }
-    }
-
-    .controls {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      gap: 12px;
-      z-index: 10;
-    }
-
-    .btn {
-      flex: 1;
-      background: #ffffff;
-      color: #78350f;
-      border: none;
-      padding: 16px 10px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 16px;
-      box-shadow: 0 8px 20px rgba(180, 83, 9, 0.12);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      touch-action: manipulation;
-    }
-
-    .btn:active {
-      transform: scale(0.92);
-      box-shadow: 0 4px 10px rgba(180, 83, 9, 0.1);
-    }
-
-    .btn-icon {
-      font-size: 22px;
+      margin-top: 6px;
     }
 
     .confetti-particle, .heart-particle {
       position: absolute;
       pointer-events: none;
       animation: floatUp 1.2s forwards ease-out;
-      z-index: 20;
+      z-index: 30;
     }
 
     @keyframes floatUp {
-      0% { opacity: 1; transform: translateY(0) scale(0.8) rotate(0deg); }
-      100% { opacity: 0; transform: translateY(-70px) scale(1.4) rotate(45deg); }
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-particle" style="width: 80px; height: 80px; top: 10%; left: 10%;"></div>
-  <div class="bg-particle" style="width: 120px; height: 120px; top: 60%; right: 5%; animation-delay: -3s;"></div>
+  <audio id="musica-fondo" loop>
+    <source src="cancion.mp3" type="audio/mpeg">
+  </audio>
 
-  <div class="header">
+  <div class="bg-particle" style="width: 70px; height: 70px; top: 10%; left: 5%;"></div>
+  <div class="bg-particle" style="width: 100px; height: 100px; top: 50%; right: 5%;"></div>
+
+  <!-- TODO EL PANEL DE CONTROL ESTÁ ARRIBA -->
+  <div class="top-panel">
     <div class="nombre-mascota">Michi</div>
+    <div class="texto-cancion" id="subtitulo-cancion">🔒 Canción privada protegida</div>
+    <button class="btn-audio" id="btn-audio" onclick="gestionarMusica()">🔒 Música Privada</button>
+
     <div class="barras-container">
       <div class="barra-item">
         <div class="barra-label"><span>Hambre</span><span id="txt-hambre">100%</span></div>
@@ -328,68 +306,44 @@
         <div class="progreso-track"><div class="progreso-fill" id="fill-felicidad"></div></div>
       </div>
     </div>
+
+    <!-- BOTONES PRINCIPALES SIEMPRE VISIBLES ARRIBA -->
+    <div class="controls">
+      <button class="btn" id="btn-comer" onclick="alimentar()">
+        <span class="btn-icon">🐟</span>
+        <span>Comer</span>
+      </button>
+      <button class="btn" id="btn-jugar" onclick="jugar()">
+        <span class="btn-icon">🎾</span>
+        <span>Jugar</span>
+      </button>
+    </div>
   </div>
 
   <div class="stage" id="stage-area">
     <div class="speech-bubble" id="bocadillo">¡Hola! Tócame para mimarme o aprender algo nuevo 🐾</div>
     
-    <div class="michi-wrapper surprise-entry" id="michi-box" onclick="acariciar(event)">
+    <div class="michi-wrapper" id="michi-box" onclick="acariciar(event)">
       <svg id="michi-svg" viewBox="0 0 100 100" width="100%" height="100%">
-        <!-- Cola -->
-        <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#e67e22" stroke-width="5" stroke-linecap="round">
-          <animateTransform attributeName="transform" type="rotate" values="0 75 75; 8 75 75; 0 75 75" dur="2s" repeatCount="indefinite"/>
-        </path>
-
-        <!-- Patitas traseras -->
+        <path d="M 75 75 Q 92 60 85 45" fill="none" stroke="#e67e22" stroke-width="5" stroke-linecap="round"/>
         <ellipse cx="28" cy="78" rx="7" ry="5" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
         <ellipse cx="72" cy="78" rx="7" ry="5" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
-
-        <!-- Orejas -->
         <polygon points="22,40 12,18 36,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
         <polygon points="24,36 17,22 33,28" fill="#f2a685"/>
-        
         <polygon points="78,40 88,18 64,28" fill="#e67e22" stroke="#d35400" stroke-width="1.5"/>
         <polygon points="76,36 83,22 67,28" fill="#f2a685"/>
-
-        <!-- Cabeza Base Naranja -->
         <ellipse cx="50" cy="58" rx="32" ry="28" fill="#e67e22" stroke="#d35400" stroke-width="2"/>
-
-        <!-- Mancha Blanca -->
         <path d="M 50 42 C 40 46 38 62 38 72 C 44 80 56 80 62 72 C 62 62 60 46 50 42 Z" fill="#ffffff"/>
-
-        <!-- Rayas en frente -->
-        <path d="M 44 38 L 47 44 M 50 36 L 50 43 M 56 38 L 53 44" stroke="#d35400" stroke-width="2" stroke-linecap="round"/>
-
-        <!-- Rubor -->
-        <ellipse cx="30" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
-        <ellipse cx="70" cy="64" rx="4" ry="2.5" fill="#f2a685" opacity="0.6"/>
-
-        <!-- Bigotes -->
-        <g id="bigotes">
-          <line x1="16" y1="60" x2="28" y2="62" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="14" y1="66" x2="27" y2="65" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="84" y1="60" x2="72" y2="62" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
-          <line x1="86" y1="66" x2="73" y2="65" stroke="#2c3e50" stroke-width="1.2" stroke-linecap="round"/>
-        </g>
-
-        <!-- Nariz -->
         <polygon points="48,59 52,59 50,62" fill="#e8a7a1"/>
-
-        <!-- Ojos en Tono Café/Oscuro Natural -->
         <g id="ojos">
           <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
           <circle cx="37" cy="53" r="3" fill="#1f110b"/>
           <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
-
           <circle cx="63" cy="53" r="5" fill="#5c3d2e"/>
           <circle cx="63" cy="53" r="3" fill="#1f110b"/>
           <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
         </g>
-
-        <!-- Boca -->
         <path id="boca" d="M 45 64 Q 50 67 55 64" fill="none" stroke="#2c3e50" stroke-width="1.8" stroke-linecap="round"/>
-
-        <!-- Patitas delanteras -->
         <g id="patitas">
           <ellipse cx="42" cy="78" rx="5" ry="4" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
           <ellipse cx="58" cy="78" rx="5" ry="4" fill="#ffffff" stroke="#d35400" stroke-width="1"/>
@@ -400,20 +354,12 @@
     <div class="shadow"></div>
   </div>
 
-  <div class="controls">
-    <button class="btn" id="btn-comer" onclick="alimentar()">
-      <span class="btn-icon">🐟</span>
-      <span>Comer</span>
-    </button>
-    <button class="btn" id="btn-jugar" onclick="jugar()">
-      <span class="btn-icon">🎾</span>
-      <span>Jugar</span>
-    </button>
-  </div>
-
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v8_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v8_felicidad')) || 100;
+    const CLAVE_CORRECTA = "thelifeofthemichi";
+    let musicaDesbloqueada = localStorage.getItem('michi_musica_auth') === 'true';
+
+    let hambre = parseInt(localStorage.getItem('michi_v9_hambre')) || 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v9_felicidad')) || 100;
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
@@ -424,6 +370,9 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
     const stageArea = document.getElementById('stage-area');
+    const musica = document.getElementById('musica-fondo');
+    const btnAudio = document.getElementById('btn-audio');
+    const subtituloCancion = document.getElementById('subtitulo-cancion');
 
     const frasesComer = [
       "🐟 ¡Mmm... delicioso!",
@@ -449,9 +398,45 @@
       "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
     ];
 
+    function actualizarEstadoBotonMusica() {
+      if (!musicaDesbloqueada) {
+        btnAudio.innerText = "🔒 Música Privada";
+        subtituloCancion.innerText = "🔒 Canción privada protegida";
+      } else {
+        if (musica.paused) {
+          btnAudio.innerText = "🎵 Reproducir Música";
+          subtituloCancion.innerText = "🎵 Canción pausada";
+        } else {
+          btnAudio.innerText = "⏸️ Pausar Música";
+          subtituloCancion.innerText = "🎵 \"Escuchando nuestra melodía favorita\"";
+        }
+      }
+    }
+
+    function gestionarMusica() {
+      if (!musicaDesbloqueada) {
+        const passwordIngresada = prompt("Ingresa la contraseña privada para reproducir la canción:");
+        if (passwordIngresada === CLAVE_CORRECTA) {
+          musicaDesbloqueada = true;
+          localStorage.setItem('michi_musica_auth', 'true');
+          alert("¡Acceso concedido! Reproduciendo canción privada.");
+          musica.play();
+        } else if (passwordIngresada !== null) {
+          alert("Contraseña incorrecta. Acceso denegado.");
+        }
+      } else {
+        if (musica.paused) {
+          musica.play();
+        } else {
+          musica.pause();
+        }
+      }
+      actualizarEstadoBotonMusica();
+    }
+
     function guardar() {
-      localStorage.setItem('michi_v8_hambre', hambre);
-      localStorage.setItem('michi_v8_felicidad', felicidad);
+      localStorage.setItem('michi_v9_hambre', hambre);
+      localStorage.setItem('michi_v9_felicidad', felicidad);
     }
 
     function mostrarTexto(msg) {
@@ -519,26 +504,9 @@
     }
 
     function triggerAnim(className) {
-      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'catch-ball', 'surprise-entry');
+      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'catch-ball');
       void michiBox.offsetWidth;
       michiBox.classList.add(className);
-    }
-
-    function lanzarsorpresaInicial() {
-      const emojis = ['🎉', '💛', '🐾', '🎈', '💖'];
-      const rect = michiBox.getBoundingClientRect();
-      for (let i = 0; i < 10; i++) {
-        setTimeout(() => {
-          const p = document.createElement('div');
-          p.className = 'confetti-particle';
-          p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-          p.style.fontSize = (18 + Math.random() * 14) + 'px';
-          p.style.left = (rect.left + rect.width / 2 + (Math.random() * 120 - 60)) + 'px';
-          p.style.top = (rect.top + rect.height / 2 + (Math.random() * 40 - 20)) + 'px';
-          document.body.appendChild(p);
-          setTimeout(() => p.remove(), 1200);
-        }, i * 80);
-      }
     }
 
     function spawnHeart(e) {
@@ -612,7 +580,7 @@
 
     window.addEventListener('load', () => {
       actualizarInterfaz();
-      lanzarsorpresaInicial();
+      actualizarEstadoBotonMusica();
     });
   </script>
 </body>
