@@ -208,7 +208,7 @@
       width: 100%;
       max-width: 380px;
       display: flex;
-      gap: 8px;
+      gap: 12px;
       background: #ffffff;
       padding: 8px;
       border-radius: 18px;
@@ -222,15 +222,15 @@
       background: #fff3c4;
       color: #78350f;
       border: none;
-      padding: 10px 4px;
+      padding: 12px;
       border-radius: 14px;
       font-weight: 900;
-      font-size: 13px;
+      font-size: 15px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 8px;
       touch-action: manipulation;
       transition: background 0.2s ease, transform 0.1s ease;
     }
@@ -240,7 +240,7 @@
       background: #fde68a;
     }
 
-    .btn-icon { font-size: 16px; }
+    .btn-icon { font-size: 18px; }
 
     .heart-particle {
       position: absolute;
@@ -252,106 +252,6 @@
     @keyframes floatUp {
       0% { opacity: 1; transform: translateY(0) scale(0.8); }
       100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
-    }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      padding: 16px;
-    }
-
-    .modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 360px;
-      border-radius: 20px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      border: 3px solid #f59e0b;
-    }
-
-    .modal-header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 900;
-      color: #78350f;
-    }
-
-    .btn-cerrar {
-      background: #fecdd3;
-      color: #9f1239;
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .minijuego-canvas-container {
-      width: 100%;
-      height: 220px;
-      background: #fffbeb;
-      border: 2px dashed #f59e0b;
-      border-radius: 12px;
-      position: relative;
-      overflow: hidden;
-      cursor: crosshair;
-    }
-
-    .selector-juegos {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .btn-juego-tab {
-      flex: 1;
-      padding: 8px;
-      font-size: 11px;
-      font-weight: 800;
-      background: #fef3c7;
-      color: #78350f;
-      border: 1px solid #f59e0b;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .btn-juego-tab.active {
-      background: #f59e0b;
-      color: white;
-    }
-
-    .raton-target {
-      position: absolute;
-      font-size: 28px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .canasta-jugador {
-      position: absolute;
-      bottom: 10px;
-      font-size: 32px;
-      transform: translateX(-50%);
-      pointer-events: none;
-    }
-
-    .comida-caida {
-      position: absolute;
-      font-size: 22px;
-      pointer-events: none;
     }
   </style>
 </head>
@@ -418,79 +318,9 @@
       <span class="btn-icon">🎾</span>
       <span>Jugar</span>
     </button>
-    <button class="btn" onclick="abrirMinijuegos()">
-      <span class="btn-icon">🎮</span>
-      <span>Minijuegos</span>
-    </button>
-  </div>
-
-  <div class="modal-overlay" id="modal-minijuegos">
-    <div class="modal-card">
-      <div class="modal-header">
-        <span id="titulo-minijuego">Caza-Ratones 🐭</span>
-        <button class="btn-cerrar" onclick="cerrarMinijuegos()">✕</button>
-      </div>
-      
-      <div class="selector-juegos">
-        <button class="btn-juego-tab active" id="tab-raton" onclick="seleccionarJuego('raton')">🐭 Cazarratón</button>
-        <button class="btn-juego-tab" id="tab-atrapa" onclick="seleccionarJuego('atrapa')">🧶 Atrapacomida</button>
-      </div>
-
-      <div class="minijuego-canvas-container" id="game-canvas"></div>
-
-      <div style="font-size: 12px; font-weight: 700; color: #78350f;" id="puntos-txt">Puntos: 0</div>
-    </div>
   </div>
 
   <script>
-    // SISTEMA DE SONIDOS SINTETIZADOS SUAVES
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    function reproducirSonido(tipo) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      const now = audioCtx.currentTime;
-
-      if (tipo === 'miau') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(900, now + 0.12);
-        osc.frequency.exponentialRampToValueAtTime(750, now + 0.25);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else if (tipo === 'comer') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(250, now);
-        osc.frequency.setValueAtTime(350, now + 0.05);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
-        osc.start(now);
-        osc.stop(now + 0.12);
-      } else if (tipo === 'jugar') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
-        gain.gain.setValueAtTime(0.06, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      } else if (tipo === 'punto') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.08);
-        gain.gain.setValueAtTime(0.05, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-        osc.start(now);
-        osc.stop(now + 0.18);
-      }
-    }
-
     let hambre = parseInt(localStorage.getItem('michi_v9_hambre')) || 100;
     let felicidad = parseInt(localStorage.getItem('michi_v9_felicidad')) || 100;
 
@@ -520,12 +350,17 @@
 
     const sabiduriaGatuna = [
       "💡 Cuidado real: Nunca le des leche de vaca a un gato adulto, no la digieren bien.",
-      "📜 Historia: En el Antiguo Egipto, los gatos eran sagrados y protegían las cosechas.",
-      "💡 Cuidado real: Los gatos prefieren su agua alejada de su plato de comida.",
-      "📜 Historia: El maullido fue desarrollado por los gatos casi en su totalidad para comunicarse con los humanos.",
-      "💡 Cuidado real: Cepillar a tu gato seguido evita que trague tantas bolas de pelo.",
-      "📜 Historia: Un gato en la Edad Media era el mejor protector de los graneros contra plagas.",
-      "💡 Cuidado real: Jugar 15 minutos al día ayuda a prevenir el estrés y sobrepeso en gatos."
+      "💡 Cuidado real: Los lirios son extremadamente tóxicos para los gatos, evita tenerlos en casa.",
+      "💡 Cuidado real: Los gatos prefieren su agua limpia, fresca y alejada de su plato de comida.",
+      "💡 Cuidado real: Cepillar a tu gato seguido evita la acumulación peligrosa de bolas de pelo.",
+      "💡 Cuidado real: Nunca les des cebolla, ajo ni chocolate; son alimentos muy nocivos para ellos.",
+      "💡 Cuidado real: Jugar 15 minutos al día previene el estrés, la ansiedad y el sobrepeso.",
+      "💡 Cuidado real: Las rascaderas son necesarias para que mantengan sus uñas sanas y liberen tensión.",
+      "📜 Curiosidad: En el Antiguo Egipto los gatos eran sagrados y protegían los granos de las plagas.",
+      "📜 Curiosidad: El maullido fue desarrollado por los gatos casi en su totalidad para comunicarse con humanos.",
+      "📜 Curiosidad: Los bigotes de los gatos miden el ancho de su cuerpo y les sirven para orientarse en la oscuridad.",
+      "📜 Curiosidad: Un gato puede saltar hasta seis veces la longitud de su propio cuerpo.",
+      "📜 Curiosidad: El ronroneo acelera la curación de sus huesos y músculos debido a su frecuencia de vibración."
     ];
 
     function guardar() {
@@ -608,14 +443,13 @@
       heart.className = 'heart-particle';
       heart.innerText = '💖';
       const rect = michiBox.getBoundingClientRect();
-      heart.style.left = (e ? (e.clientX || (rect.left + rect.width / 2)) : (rect.left + rect.width / 2)) + 'px';
-      heart.style.top = (e ? (e.clientY || (rect.top + rect.height / 2)) : (rect.top + rect.height / 2)) + 'px';
+      heart.style.left = (e.clientX || (rect.left + rect.width / 2)) + 'px';
+      heart.style.top = (e.clientY || (rect.top + rect.height / 2)) + 'px';
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 1000);
     }
 
     function alimentar() {
-      reproducirSonido('comer');
       hambre = Math.min(100, hambre + 25);
       if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
       guardar();
@@ -635,7 +469,6 @@
     }
 
     function jugar() {
-      reproducirSonido('jugar');
       felicidad = Math.min(100, felicidad + 25);
       hambre = Math.max(0, hambre - 5);
       guardar();
@@ -656,7 +489,6 @@
     }
 
     function acariciar(e) {
-      reproducirSonido('miau');
       spawnHeart(e);
       triggerAnim('happy-bounce');
       if (hambre < 40 || felicidad < 40) {
@@ -666,6 +498,7 @@
       }
     }
 
+    // Se redujo el temporizador a 4 segundos (4000 ms)
     setInterval(() => {
       if (hambre > 0 || felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
@@ -674,123 +507,6 @@
         actualizarInterfaz();
       }
     }, 4000);
-
-    let minijuegoActual = 'raton';
-    let juegoLoop = null;
-    let puntos = 0;
-
-    function abrirMinijuegos() {
-      document.getElementById('modal-minijuegos').style.display = 'flex';
-      seleccionarJuego('raton');
-    }
-
-    function cerrarMinijuegos() {
-      document.getElementById('modal-minijuegos').style.display = 'none';
-      clearInterval(juegoLoop);
-      const canvas = document.getElementById('game-canvas');
-      canvas.innerHTML = '';
-      actualizarInterfaz("¡Bien jugado! 🐾");
-    }
-
-    function seleccionarJuego(tipo) {
-      minijuegoActual = tipo;
-      document.getElementById('tab-raton').classList.toggle('active', tipo === 'raton');
-      document.getElementById('tab-atrapa').classList.toggle('active', tipo === 'atrapa');
-      document.getElementById('titulo-minijuego').innerText = tipo === 'raton' ? 'Caza-Ratones 🐭' : 'Atrapa-Croquetas 🧶';
-      iniciarJuego();
-    }
-
-    function iniciarJuego() {
-      clearInterval(juegoLoop);
-      const canvas = document.getElementById('game-canvas');
-      canvas.innerHTML = '';
-      puntos = 0;
-      document.getElementById('puntos-txt').innerText = `Puntos: ${puntos}`;
-
-      if (minijuegoActual === 'raton') {
-        juegoLoop = setInterval(spawnRaton, 900);
-      } else if (minijuegoActual === 'atrapa') {
-        const canasta = document.createElement('div');
-        canasta.className = 'canasta-jugador';
-        canasta.innerText = '🧺';
-        canasta.id = 'canasta';
-        canasta.style.left = '50%';
-        canvas.appendChild(canasta);
-
-        canvas.onmousemove = (e) => {
-          const rect = canvas.getBoundingClientRect();
-          canasta.style.left = Math.max(20, Math.min(rect.width - 20, e.clientX - rect.left)) + 'px';
-        };
-
-        canvas.ontouchmove = (e) => {
-          const rect = canvas.getBoundingClientRect();
-          canasta.style.left = Math.max(20, Math.min(rect.width - 20, e.touches[0].clientX - rect.left)) + 'px';
-        };
-
-        juegoLoop = setInterval(spawnComidaCaida, 1000);
-      }
-    }
-
-    function spawnRaton() {
-      const canvas = document.getElementById('game-canvas');
-      if (canvas.children.length > 4) return;
-
-      const raton = document.createElement('div');
-      raton.className = 'raton-target';
-      raton.innerText = '🐭';
-      raton.style.left = Math.random() * 80 + 10 + '%';
-      raton.style.top = Math.random() * 70 + 10 + '%';
-
-      raton.onclick = () => {
-        reproducirSonido('punto');
-        puntos++;
-        felicidad = Math.min(100, felicidad + 4);
-        guardar();
-        document.getElementById('puntos-txt').innerText = `Puntos: ${puntos} (+Felicidad!)`;
-        spawnHeart();
-        raton.remove();
-      };
-
-      canvas.appendChild(raton);
-      setTimeout(() => raton.remove(), 1200);
-    }
-
-    function spawnComidaCaida() {
-      const canvas = document.getElementById('game-canvas');
-      const comida = document.createElement('div');
-      comida.className = 'comida-caida';
-      comida.innerText = '🐟';
-      comida.style.left = Math.random() * 80 + 10 + '%';
-      comida.style.top = '0px';
-      canvas.appendChild(comida);
-
-      let posY = 0;
-      const caidaInt = setInterval(() => {
-        posY += 4;
-        comida.style.top = posY + 'px';
-
-        const canasta = document.getElementById('canasta');
-        if (canasta) {
-          const cRect = canasta.getBoundingClientRect();
-          const fRect = comida.getBoundingClientRect();
-
-          if (fRect.bottom >= cRect.top && fRect.left < cRect.right && fRect.right > cRect.left) {
-            reproducirSonido('punto');
-            puntos++;
-            hambre = Math.min(100, hambre + 5);
-            guardar();
-            document.getElementById('puntos-txt').innerText = `Puntos: ${puntos} (+Hambre!)`;
-            clearInterval(caidaInt);
-            comida.remove();
-          }
-        }
-
-        if (posY > 200) {
-          clearInterval(caidaInt);
-          comida.remove();
-        }
-      }, 30);
-    }
 
     window.addEventListener('load', () => {
       actualizarInterfaz();
