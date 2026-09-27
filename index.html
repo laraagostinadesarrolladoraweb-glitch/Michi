@@ -12,6 +12,8 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       user-select: none;
       -webkit-user-select: none;
+      /* Corrección para eliminar el recuadro/destello azul al tocar en móviles */
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
@@ -498,7 +500,6 @@
       }
     }
 
-    // Se redujo el temporizador a 4 segundos (4000 ms)
     setInterval(() => {
       if (hambre > 0 || felicidad > 0) {
         hambre = Math.max(0, hambre - 2);
