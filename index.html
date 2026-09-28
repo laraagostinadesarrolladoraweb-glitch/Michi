@@ -395,15 +395,23 @@
   </div>
 
   <script>
-    let ultimaVez = parseInt(localStorage.getItem('michi_v11_last_time')) || Date.now();
-    let hambre = parseInt(localStorage.getItem('michi_v11_hambre')) ?? 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v11_felicidad')) ?? 100;
-    let energia = parseInt(localStorage.getItem('michi_v11_energia')) ?? 100;
+    let ultimaVez = parseInt(localStorage.getItem('michi_v12_last_time')) || Date.now();
+    let hambre = parseInt(localStorage.getItem('michi_v12_hambre'));
+    if (isNaN(hambre)) hambre = 100;
+    
+    let felicidad = parseInt(localStorage.getItem('michi_v12_felicidad'));
+    if (isNaN(felicidad)) felicidad = 100;
+
+    let energia = parseInt(localStorage.getItem('michi_v12_energia'));
+    if (isNaN(energia)) energia = 100;
+
+    let estaDormiendo = false;
+    let intervaloDormir = null;
 
     const ahora = Date.now();
     const segundosPasados = Math.floor((ahora - ultimaVez) / 1000);
 
-    if (segundosPasados > 0) {
+    if (segundosPasados > 0 && !isNaN(segundosPasados)) {
       const desgaste = Math.floor(segundosPasados / 2);
       hambre = Math.max(0, hambre - desgaste);
       felicidad = Math.max(0, felicidad - desgaste);
@@ -421,6 +429,9 @@
     const bocadillo = document.getElementById('bocadillo');
     const michiBox = document.getElementById('michi-box');
     const stageArea = document.getElementById('stage-area');
+    const btnComer = document.getElementById('btn-comer');
+    const btnJugar = document.getElementById('btn-jugar');
+    const btnDormir = document.getElementById('btn-dormir');
 
     const frasesComer = [
       "🐟 ¡Mmm... delicioso!",
@@ -459,10 +470,10 @@
     ];
 
     function guardar() {
-      localStorage.setItem('michi_v11_hambre', hambre);
-      localStorage.setItem('michi_v11_felicidad', felicidad);
-      localStorage.setItem('michi_v11_energia', energia);
-      localStorage.setItem('michi_v11_last_time', Date.now());
+      localStorage.setItem('michi_v12_hambre', hambre);
+      localStorage.setItem('michi_v12_felicidad', felicidad);
+      localStorage.setItem('michi_v12_energia', energia);
+      localStorage.setItem('michi_v12_last_time', Date.now());
     }
 
     function mostrarTexto(msg) {
@@ -481,34 +492,36 @@
       txtFelicidad.innerText = felicidad + '%';
       txtEnergia.innerText = energia + '%';
 
-      if (hambre <= 0 || felicidad <= 0 || energia <= 0) {
-        ojos.innerHTML = `
-          <path d="M 33 55 L 41 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 33 49 L 41 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 59 55 L 67 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-          <path d="M 59 49 L 67 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
-        `;
-        boca.setAttribute('d', 'M 45 67 Q 50 62 55 67');
-        
-        if (mensajePersonalizado) {
-          mostrarTexto(mensajePersonalizado);
-        } else if (energia <= 0) {
-          mostrarTexto("💤 ¡Estoy agotado! Toca 'Dormir' 🌙 para recargarme.");
+      if (!estaDormiendo) {
+        if (hambre <= 0 || felicidad <= 0 || energia <= 0) {
+          ojos.innerHTML = `
+            <path d="M 33 55 L 41 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 33 49 L 41 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 59 55 L 67 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 59 49 L 67 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+          `;
+          boca.setAttribute('d', 'M 45 67 Q 50 62 55 67');
+          
+          if (mensajePersonalizado) {
+            mostrarTexto(mensajePersonalizado);
+          } else if (energia <= 0) {
+            mostrarTexto("💤 ¡Estoy agotado! Toca 'Dormir' 🌙 para recargarme.");
+          } else {
+            mostrarTexto("😿 ¡Necesito atención! Revisa mis barritas.");
+          }
         } else {
-          mostrarTexto("😿 ¡Necesito atención! Revisa mis barritas.");
-        }
-      } else {
-        ojos.innerHTML = `
-          <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
-          <circle cx="37" cy="53" r="3" fill="#1f110b"/>
-          <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
-          <circle cx="63" cy="53" r="5" fill="#5c3d2e"/>
-          <circle cx="63" cy="53" r="3" fill="#1f110b"/>
-          <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
-        `;
-        boca.setAttribute('d', 'M 45 64 Q 50 67 55 64');
-        if (mensajePersonalizado) {
-          mostrarTexto(mensajePersonalizado);
+          ojos.innerHTML = `
+            <circle cx="37" cy="53" r="5" fill="#5c3d2e"/>
+            <circle cx="37" cy="53" r="3" fill="#1f110b"/>
+            <circle cx="35.5" cy="51.5" r="1.2" fill="#ffffff"/>
+            <circle cx="63" cy="53" r="5" fill="#5c3d2e"/>
+            <circle cx="63" cy="53" r="3" fill="#1f110b"/>
+            <circle cx="61.5" cy="51.5" r="1.2" fill="#ffffff"/>
+          `;
+          boca.setAttribute('d', 'M 45 64 Q 50 67 55 64');
+          if (mensajePersonalizado) {
+            mostrarTexto(mensajePersonalizado);
+          }
         }
       }
       guardar();
@@ -532,6 +545,7 @@
     }
 
     function alimentar() {
+      if (estaDormiendo) return;
       hambre = Math.min(100, hambre + 25);
       if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
       guardar();
@@ -551,6 +565,7 @@
     }
 
     function jugar() {
+      if (estaDormiendo) return;
       if (energia < 10) {
         actualizarInterfaz("💤 ¡No tengo energía para jugar! Déjame dormir un poco 🌙");
         return;
@@ -576,29 +591,64 @@
     }
 
     function dormir() {
-      energia = 100;
-      hambre = Math.max(0, hambre - 5);
-      guardar();
+      if (estaDormiendo) return;
+      if (energia >= 100) {
+        actualizarInterfaz("🌙 ¡Ya tengo toda la energía! No tengo sueño.");
+        return;
+      }
+
+      estaDormiendo = true;
+      btnComer.disabled = true;
+      btnJugar.disabled = true;
+      btnDormir.disabled = true;
+      btnComer.style.opacity = "0.5";
+      btnJugar.style.opacity = "0.5";
+      btnDormir.style.opacity = "0.5";
+
+      mostrarTexto("🌙 Zzz... Durmiendo y recuperando energía...");
 
       ojos.innerHTML = `
         <path d="M 33 53 Q 37 56 41 53" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
         <path d="M 59 53 Q 63 56 67 53" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
       `;
+      boca.setAttribute('d', 'M 45 64 Q 50 67 55 64');
+      triggerAnim('sleep-pulse');
 
       const zzz = document.createElement('div');
       zzz.className = 'anim-zzz';
+      zzz.id = 'z-particles';
       zzz.innerText = '💤 zZZ';
       stageArea.appendChild(zzz);
 
-      triggerAnim('sleep-pulse');
+      // Sube la energía cada 7 segundos progresivamente hasta llegar a 100
+      intervaloDormir = setInterval(() => {
+        energia = Math.min(100, energia + 20);
+        actualizarInterfaz();
 
-      setTimeout(() => {
-        zzz.remove();
-        actualizarInterfaz(obtenerElementoAleatorio(frasesDormir));
-      }, 1500);
+        if (energia >= 100) {
+          clearInterval(intervaloDormir);
+          estaDormiendo = false;
+          btnComer.disabled = false;
+          btnJugar.disabled = false;
+          btnDormir.disabled = false;
+          btnComer.style.opacity = "1";
+          btnJugar.style.opacity = "1";
+          btnDormir.style.opacity = "1";
+
+          const zParticles = document.getElementById('z-particles');
+          if (zParticles) zParticles.remove();
+
+          triggerAnim('happy-bounce');
+          actualizarInterfaz(obtenerElementoAleatorio(frasesDormir));
+        }
+      }, 7000);
     }
 
     function acariciar(e) {
+      if (estaDormiendo) {
+        mostrarTexto("shhh... Michi está durmiendo 🌙💤");
+        return;
+      }
       spawnHeart(e);
       triggerAnim('happy-bounce');
       if (hambre < 40 || felicidad < 40 || energia < 40) {
@@ -609,7 +659,7 @@
     }
 
     setInterval(() => {
-      if (hambre > 0 || felicidad > 0 || energia > 0) {
+      if (!estaDormiendo && (hambre > 0 || felicidad > 0 || energia > 0)) {
         hambre = Math.max(0, hambre - 2);
         felicidad = Math.max(0, felicidad - 2);
         energia = Math.max(0, energia - 2);
