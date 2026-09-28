@@ -31,7 +31,6 @@
       position: relative;
     }
 
-    /* Foto Polaroid posicionada más abajo para no chocar con la barra */
     .polaroid-fondo {
       position: absolute;
       top: 130px;
@@ -86,13 +85,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       z-index: 20;
     }
 
     .nombre-mascota {
       color: #b45309;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       letter-spacing: 1px;
     }
@@ -100,9 +99,9 @@
     .barras-container {
       width: 100%;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       background: rgba(255, 255, 255, 0.9);
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
       border: 2px solid rgba(255, 255, 255, 0.8);
@@ -112,11 +111,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .barra-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       color: #78350f;
       display: flex;
@@ -125,7 +124,7 @@
 
     .progreso-track {
       background: #fde68a;
-      height: 10px;
+      height: 8px;
       border-radius: 10px;
       overflow: hidden;
       position: relative;
@@ -140,6 +139,7 @@
 
     #fill-hambre { background: linear-gradient(90deg, #34d399, #10b981); }
     #fill-felicidad { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    #fill-energia { background: linear-gradient(90deg, #ec4899, #db2777); }
 
     .stage {
       flex: 1;
@@ -196,6 +196,7 @@
     .michi-wrapper.happy-bounce { animation: bounce 0.6s ease; }
     .michi-wrapper.eat-wiggle { animation: chew 0.8s ease; }
     .michi-wrapper.catch-ball { animation: catchJump 0.8s ease; }
+    .michi-wrapper.sleep-pulse { animation: sleepPulse 2s infinite ease-in-out; }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0) scale(1); }
@@ -212,6 +213,11 @@
       0% { transform: translateY(0); }
       30% { transform: translateY(-25px) rotate(-8deg); }
       100% { transform: translateY(0); }
+    }
+
+    @keyframes sleepPulse {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(4px) scale(0.98, 1.02); }
     }
 
     .animated-item {
@@ -234,6 +240,23 @@
       100% { transform: translate(0px, 10px) scale(0.2); opacity: 0; }
     }
 
+    .anim-zzz {
+      position: absolute;
+      top: 10px;
+      right: 30px;
+      font-size: 20px;
+      font-weight: 900;
+      color: #db2777;
+      pointer-events: none;
+      animation: floatZzz 1.5s infinite ease-in-out;
+      z-index: 20;
+    }
+    @keyframes floatZzz {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+    }
+
     .shadow {
       width: 100px;
       height: 12px;
@@ -246,7 +269,7 @@
       width: 100%;
       max-width: 380px;
       display: flex;
-      gap: 12px;
+      gap: 8px;
       background: #ffffff;
       padding: 8px;
       border-radius: 18px;
@@ -260,15 +283,16 @@
       background: #fff3c4;
       color: #78350f;
       border: none;
-      padding: 12px;
+      padding: 10px 4px;
       border-radius: 14px;
       font-weight: 900;
-      font-size: 15px;
+      font-size: 13px;
       cursor: pointer;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 4px;
       touch-action: manipulation;
       transition: background 0.2s ease, transform 0.1s ease;
     }
@@ -278,7 +302,7 @@
       background: #fde68a;
     }
 
-    .btn-icon { font-size: 18px; }
+    .btn-icon { font-size: 16px; }
 
     .heart-particle {
       position: absolute;
@@ -295,7 +319,6 @@
 </head>
 <body>
 
-  <!-- Foto Polaroid ubicada debajo de la barra superior -->
   <div class="polaroid-fondo">
     <img src="752761622_18074629694700593_2327483800002753203_n.jpg" alt="Recuerdo">
   </div>
@@ -314,6 +337,10 @@
       <div class="barra-item">
         <div class="barra-label"><span>Felicidad</span><span id="txt-felicidad">100%</span></div>
         <div class="progreso-track"><div class="progreso-fill" id="fill-felicidad"></div></div>
+      </div>
+      <div class="barra-item">
+        <div class="barra-label"><span>Energía</span><span id="txt-energia">100%</span></div>
+        <div class="progreso-track"><div class="progreso-fill" id="fill-energia"></div></div>
       </div>
     </div>
   </div>
@@ -361,16 +388,34 @@
       <span class="btn-icon">🎾</span>
       <span>Jugar</span>
     </button>
+    <button class="btn" id="btn-dormir" onclick="dormir()">
+      <span class="btn-icon">🌙</span>
+      <span>Dormir</span>
+    </button>
   </div>
 
   <script>
-    let hambre = parseInt(localStorage.getItem('michi_v9_hambre')) || 100;
-    let felicidad = parseInt(localStorage.getItem('michi_v9_felicidad')) || 100;
+    let ultimaVez = parseInt(localStorage.getItem('michi_v11_last_time')) || Date.now();
+    let hambre = parseInt(localStorage.getItem('michi_v11_hambre')) ?? 100;
+    let felicidad = parseInt(localStorage.getItem('michi_v11_felicidad')) ?? 100;
+    let energia = parseInt(localStorage.getItem('michi_v11_energia')) ?? 100;
+
+    const ahora = Date.now();
+    const segundosPasados = Math.floor((ahora - ultimaVez) / 1000);
+
+    if (segundosPasados > 0) {
+      const desgaste = Math.floor(segundosPasados / 2);
+      hambre = Math.max(0, hambre - desgaste);
+      felicidad = Math.max(0, felicidad - desgaste);
+      energia = Math.max(0, energia - desgaste);
+    }
 
     const fillHambre = document.getElementById('fill-hambre');
     const fillFelicidad = document.getElementById('fill-felicidad');
+    const fillEnergia = document.getElementById('fill-energia');
     const txtHambre = document.getElementById('txt-hambre');
     const txtFelicidad = document.getElementById('txt-felicidad');
+    const txtEnergia = document.getElementById('txt-energia');
     const ojos = document.getElementById('ojos');
     const boca = document.getElementById('boca');
     const bocadillo = document.getElementById('bocadillo');
@@ -391,6 +436,13 @@
       "🐾 ¡Buen tiro!"
     ];
 
+    const frasesDormir = [
+      "🌙 Zzz... qué sueño tan reparador...",
+      "💤 Soñando con pescaditos voladores...",
+      "🌙 Energías recargadas al 100%",
+      "🌙 Ronroneos de paz..."
+    ];
+
     const sabiduriaGatuna = [
       "💡 Cuidado real: Nunca le des leche de vaca a un gato adulto, no la digieren bien.",
       "💡 Cuidado real: Los lirios son extremadamente tóxicos para los gatos, evita tenerlos en casa.",
@@ -407,8 +459,10 @@
     ];
 
     function guardar() {
-      localStorage.setItem('michi_v9_hambre', hambre);
-      localStorage.setItem('michi_v9_felicidad', felicidad);
+      localStorage.setItem('michi_v11_hambre', hambre);
+      localStorage.setItem('michi_v11_felicidad', felicidad);
+      localStorage.setItem('michi_v11_energia', energia);
+      localStorage.setItem('michi_v11_last_time', Date.now());
     }
 
     function mostrarTexto(msg) {
@@ -422,10 +476,12 @@
     function actualizarInterfaz(mensajePersonalizado = null) {
       fillHambre.style.width = hambre + '%';
       fillFelicidad.style.width = felicidad + '%';
+      fillEnergia.style.width = energia + '%';
       txtHambre.innerText = hambre + '%';
       txtFelicidad.innerText = felicidad + '%';
+      txtEnergia.innerText = energia + '%';
 
-      if (hambre <= 0 || felicidad <= 0) {
+      if (hambre <= 0 || felicidad <= 0 || energia <= 0) {
         ojos.innerHTML = `
           <path d="M 33 55 L 41 49" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
           <path d="M 33 49 L 41 55" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
@@ -436,28 +492,10 @@
         
         if (mensajePersonalizado) {
           mostrarTexto(mensajePersonalizado);
-        } else if (hambre <= 0 && felicidad <= 0) {
-          mostrarTexto("😿 ¡Tengo mucha hambre y pena! Toca 'Comer' 🐟 y 'Jugar' 🎾");
-        } else if (hambre <= 0) {
-          mostrarTexto("😾 ¡No tengo energía! Toca el botón 'Comer' 🐟");
+        } else if (energia <= 0) {
+          mostrarTexto("💤 ¡Estoy agotado! Toca 'Dormir' 🌙 para recargarme.");
         } else {
-          mostrarTexto("😿 Estoy triste... Presiona 'Jugar' 🎾");
-        }
-      } else if (hambre < 40 || felicidad < 40) {
-        ojos.innerHTML = `
-          <circle cx="37" cy="53" r="3.5" fill="#1f110b"/>
-          <circle cx="63" cy="53" r="3.5" fill="#1f110b"/>
-        `;
-        boca.setAttribute('d', 'M 45 65 L 55 65');
-        
-        if (mensajePersonalizado) {
-          mostrarTexto(mensajePersonalizado);
-        } else if (hambre < 40 && felicidad < 40) {
-          mostrarTexto("🙀 Presiona 'Comer' 🐟 para alimentarme y 'Jugar' 🎾 para alegrarme.");
-        } else if (hambre < 40) {
-          mostrarTexto("😾 Tengo hambre... ¡Presiona el botón 'Comer' 🐟!");
-        } else {
-          mostrarTexto("😿 Me estoy aburriendo... Presiona 'Jugar' 🎾.");
+          mostrarTexto("😿 ¡Necesito atención! Revisa mis barritas.");
         }
       } else {
         ojos.innerHTML = `
@@ -473,10 +511,11 @@
           mostrarTexto(mensajePersonalizado);
         }
       }
+      guardar();
     }
 
     function triggerAnim(className) {
-      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'catch-ball');
+      michiBox.classList.remove('happy-bounce', 'eat-wiggle', 'catch-ball', 'sleep-pulse');
       void michiBox.offsetWidth;
       michiBox.classList.add(className);
     }
@@ -512,8 +551,13 @@
     }
 
     function jugar() {
+      if (energia < 10) {
+        actualizarInterfaz("💤 ¡No tengo energía para jugar! Déjame dormir un poco 🌙");
+        return;
+      }
       felicidad = Math.min(100, felicidad + 25);
       hambre = Math.max(0, hambre - 5);
+      energia = Math.max(0, energia - 10);
       guardar();
 
       const ball = document.createElement('div');
@@ -531,10 +575,33 @@
       }, 700);
     }
 
+    function dormir() {
+      energia = 100;
+      hambre = Math.max(0, hambre - 5);
+      guardar();
+
+      ojos.innerHTML = `
+        <path d="M 33 53 Q 37 56 41 53" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 59 53 Q 63 56 67 53" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+      `;
+
+      const zzz = document.createElement('div');
+      zzz.className = 'anim-zzz';
+      zzz.innerText = '💤 zZZ';
+      stageArea.appendChild(zzz);
+
+      triggerAnim('sleep-pulse');
+
+      setTimeout(() => {
+        zzz.remove();
+        actualizarInterfaz(obtenerElementoAleatorio(frasesDormir));
+      }, 1500);
+    }
+
     function acariciar(e) {
       spawnHeart(e);
       triggerAnim('happy-bounce');
-      if (hambre < 40 || felicidad < 40) {
+      if (hambre < 40 || felicidad < 40 || energia < 40) {
         actualizarInterfaz();
       } else {
         actualizarInterfaz(obtenerElementoAleatorio(sabiduriaGatuna));
@@ -542,9 +609,10 @@
     }
 
     setInterval(() => {
-      if (hambre > 0 || felicidad > 0) {
+      if (hambre > 0 || felicidad > 0 || energia > 0) {
         hambre = Math.max(0, hambre - 2);
         felicidad = Math.max(0, felicidad - 2);
+        energia = Math.max(0, energia - 2);
         guardar();
         actualizarInterfaz();
       }
