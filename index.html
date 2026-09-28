@@ -395,14 +395,14 @@
   </div>
 
   <script>
-    let ultimaVez = parseInt(localStorage.getItem('michi_v12_last_time')) || Date.now();
-    let hambre = parseInt(localStorage.getItem('michi_v12_hambre'));
+    let ultimaVez = parseInt(localStorage.getItem('michi_v13_last_time')) || Date.now();
+    let hambre = parseInt(localStorage.getItem('michi_v13_hambre'));
     if (isNaN(hambre)) hambre = 100;
     
-    let felicidad = parseInt(localStorage.getItem('michi_v12_felicidad'));
+    let felicidad = parseInt(localStorage.getItem('michi_v13_felicidad'));
     if (isNaN(felicidad)) felicidad = 100;
 
-    let energia = parseInt(localStorage.getItem('michi_v12_energia'));
+    let energia = parseInt(localStorage.getItem('michi_v13_energia'));
     if (isNaN(energia)) energia = 100;
 
     let estaDormiendo = false;
@@ -412,7 +412,7 @@
     const segundosPasados = Math.floor((ahora - ultimaVez) / 1000);
 
     if (segundosPasados > 0 && !isNaN(segundosPasados)) {
-      const desgaste = Math.floor(segundosPasados / 2);
+      const desgaste = Math.floor(segundosPasados / 4); // Desgaste más lento al reabrir
       hambre = Math.max(0, hambre - desgaste);
       felicidad = Math.max(0, felicidad - desgaste);
       energia = Math.max(0, energia - desgaste);
@@ -470,10 +470,10 @@
     ];
 
     function guardar() {
-      localStorage.setItem('michi_v12_hambre', hambre);
-      localStorage.setItem('michi_v12_felicidad', felicidad);
-      localStorage.setItem('michi_v12_energia', energia);
-      localStorage.setItem('michi_v12_last_time', Date.now());
+      localStorage.setItem('michi_v13_hambre', hambre);
+      localStorage.setItem('michi_v13_felicidad', felicidad);
+      localStorage.setItem('michi_v13_energia', energia);
+      localStorage.setItem('michi_v13_last_time', Date.now());
     }
 
     function mostrarTexto(msg) {
@@ -546,8 +546,7 @@
 
     function alimentar() {
       if (estaDormiendo) return;
-      hambre = Math.min(100, hambre + 25);
-      if (felicidad < 20) felicidad = Math.min(100, felicidad + 10);
+      hambre = Math.min(100, hambre + 30); // Sube más al comer
       guardar();
 
       const fish = document.createElement('div');
@@ -570,9 +569,9 @@
         actualizarInterfaz("💤 ¡No tengo energía para jugar! Déjame dormir un poco 🌙");
         return;
       }
-      felicidad = Math.min(100, felicidad + 25);
-      hambre = Math.max(0, hambre - 5);
-      energia = Math.max(0, energia - 10);
+      felicidad = Math.min(100, felicidad + 30); // Sube más la felicidad
+      hambre = Math.max(0, hambre - 3); // Gasta menos hambre
+      energia = Math.max(0, energia - 5);  // Gasta menos energía (antes era -10)
       guardar();
 
       const ball = document.createElement('div');
@@ -620,7 +619,6 @@
       zzz.innerText = '💤 zZZ';
       stageArea.appendChild(zzz);
 
-      // Sube la energía cada 7 segundos progresivamente hasta llegar a 100
       intervaloDormir = setInterval(() => {
         energia = Math.min(100, energia + 20);
         actualizarInterfaz();
@@ -658,15 +656,16 @@
       }
     }
 
+    // Desgaste automático más pausado (cada 7 segundos en lugar de 4)
     setInterval(() => {
       if (!estaDormiendo && (hambre > 0 || felicidad > 0 || energia > 0)) {
-        hambre = Math.max(0, hambre - 2);
-        felicidad = Math.max(0, felicidad - 2);
-        energia = Math.max(0, energia - 2);
+        hambre = Math.max(0, hambre - 1);
+        felicidad = Math.max(0, felicidad - 1);
+        energia = Math.max(0, energia - 1);
         guardar();
         actualizarInterfaz();
       }
-    }, 4000);
+    }, 7000);
 
     window.addEventListener('load', () => {
       actualizarInterfaz();
